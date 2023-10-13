@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ADDDA_APPModelStoreContainer" CdmEntityContainer="ADDDA_APPEntities">
+    <EntitySetMapping Name="address">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.address">
+        <MappingFragment StoreEntitySet="address">
+          <ScalarProperty Name="address_id" ColumnName="address_id" />
+          <ScalarProperty Name="address_name" ColumnName="address_name" />
+          <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="boocking_order">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.boocking_order">
+        <MappingFragment StoreEntitySet="boocking_order">
+          <ScalarProperty Name="boocking_order_id" ColumnName="boocking_order_id" />
+          <ScalarProperty Name="start_date" ColumnName="start_date" />
+          <ScalarProperty Name="start_time" ColumnName="start_time" />
+          <ScalarProperty Name="end_date" ColumnName="end_date" />
+          <ScalarProperty Name="end_time" ColumnName="end_time" />
+          <ScalarProperty Name="total" ColumnName="total" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="complete_flg" ColumnName="complete_flg" />
+          <ScalarProperty Name="boocking_status_id" ColumnName="boocking_status_id" />
+          <ScalarProperty Name="create_by" ColumnName="create_by" />
+          <ScalarProperty Name="car_id" ColumnName="car_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="boocking_status">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.boocking_status">
+        <MappingFragment StoreEntitySet="boocking_status">
+          <ScalarProperty Name="boocking_status_id" ColumnName="boocking_status_id" />
+          <ScalarProperty Name="boocking_status_name" ColumnName="boocking_status_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="brand">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.brand">
+        <MappingFragment StoreEntitySet="brand">
+          <ScalarProperty Name="brand_id" ColumnName="brand_id" />
+          <ScalarProperty Name="brand_name" ColumnName="brand_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="car">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.car">
+        <MappingFragment StoreEntitySet="car">
+          <ScalarProperty Name="car_id" ColumnName="car_id" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="year_manufacture" ColumnName="year_manufacture" />
+          <ScalarProperty Name="number_plate" ColumnName="number_plate" />
+          <ScalarProperty Name="description" ColumnName="description" />
+          <ScalarProperty Name="address" ColumnName="address" />
+          <ScalarProperty Name="image" ColumnName="image" />
+          <ScalarProperty Name="is_delete" ColumnName="is_delete" />
+          <ScalarProperty Name="car_status_id" ColumnName="car_status_id" />
+          <ScalarProperty Name="brand_id" ColumnName="brand_id" />
+          <ScalarProperty Name="model_id" ColumnName="model_id" />
+          <ScalarProperty Name="car_type_id" ColumnName="car_type_id" />
+          <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+          <ScalarProperty Name="vehicle_registration_id" ColumnName="vehicle_registration_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="car_status">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.car_status">
+        <MappingFragment StoreEntitySet="car_status">
+          <ScalarProperty Name="car_status_id" ColumnName="car_status_id" />
+          <ScalarProperty Name="car_status_name" ColumnName="car_status_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="car_type">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.car_type">
+        <MappingFragment StoreEntitySet="car_type">
+          <ScalarProperty Name="car_type_id" ColumnName="car_type_id" />
+          <ScalarProperty Name="car_type_name" ColumnName="car_type_name" />
+          <ScalarProperty Name="number_seats" ColumnName="number_seats" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="customer">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.customer">
+        <MappingFragment StoreEntitySet="customer">
+          <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="name_display" ColumnName="name_display" />
+          <ScalarProperty Name="full_name" ColumnName="full_name" />
+          <ScalarProperty Name="birthday" ColumnName="birthday" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="role_name" ColumnName="role_name" />
+          <ScalarProperty Name="id_number" ColumnName="id_number" />
+          <ScalarProperty Name="id_frontside" ColumnName="id_frontside" />
+          <ScalarProperty Name="id_backside" ColumnName="id_backside" />
+          <ScalarProperty Name="verify_flg" ColumnName="verify_flg" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="favorite_car">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.favorite_car">
+        <MappingFragment StoreEntitySet="favorite_car">
+          <ScalarProperty Name="favorite_car_id" ColumnName="favorite_car_id" />
+          <ScalarProperty Name="customer_id" ColumnName="customer_id" />
+          <ScalarProperty Name="car_id" ColumnName="car_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="feeback">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.feeback">
+        <MappingFragment StoreEntitySet="feeback">
+          <ScalarProperty Name="feeback_id" ColumnName="feeback_id" />
+          <ScalarProperty Name="rate" ColumnName="rate" />
+          <ScalarProperty Name="comment" ColumnName="comment" />
+          <ScalarProperty Name="create_at" ColumnName="create_at" />
+          <ScalarProperty Name="create_by" ColumnName="create_by" />
+          <ScalarProperty Name="car_id" ColumnName="car_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="model">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.model">
+        <MappingFragment StoreEntitySet="model">
+          <ScalarProperty Name="model_id" ColumnName="model_id" />
+          <ScalarProperty Name="model_name" ColumnName="model_name" />
+          <ScalarProperty Name="brand_id" ColumnName="brand_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vehicle_registration">
+      <EntityTypeMapping TypeName="ADDDA_APPModel.vehicle_registration">
+        <MappingFragment StoreEntitySet="vehicle_registration">
+          <ScalarProperty Name="vehicle_registration_id" ColumnName="vehicle_registration_id" />
+          <ScalarProperty Name="vehicle_registration_image" ColumnName="vehicle_registration_image" />
+          <ScalarProperty Name="vehicle_inspection_image" ColumnName="vehicle_inspection_image" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
