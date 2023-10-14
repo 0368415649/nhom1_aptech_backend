@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ADDDA_APPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="address">
+    <Key>
+      <PropertyRef Name="address_id" />
+    </Key>
+    <Property Name="address_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="address_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="customer_id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="booking">
+    <Key>
+      <PropertyRef Name="booking_id" />
+    </Key>
+    <Property Name="booking_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="start_date" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="start_time" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="end_date" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="end_time" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="total" Type="Int32" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="complete_flg" Type="Int32" />
+    <Property Name="boocking_status_id" Type="Int32" />
+    <Property Name="create_by" Type="Int32" />
+    <Property Name="car_id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="booking_status">
+    <Key>
+      <PropertyRef Name="booking_status_id" />
+    </Key>
+    <Property Name="booking_status_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="booking_status_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="brand">
+    <Key>
+      <PropertyRef Name="brand_id" />
+    </Key>
+    <Property Name="brand_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="brand_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="car">
+    <Key>
+      <PropertyRef Name="car_id" />
+    </Key>
+    <Property Name="car_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="price" Type="Double" />
+    <Property Name="year_manufacture" Type="Int32" />
+    <Property Name="number_plate" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="is_delete" Type="Int32" />
+    <Property Name="car_status_id" Type="Int32" />
+    <Property Name="brand_id" Type="Int32" />
+    <Property Name="model_id" Type="Int32" />
+    <Property Name="car_type_id" Type="Int32" />
+    <Property Name="customer_id" Type="Int32" />
+    <Property Name="vehicle_registration_id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="car_status">
+    <Key>
+      <PropertyRef Name="car_status_id" />
+    </Key>
+    <Property Name="car_status_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="car_status_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="car_type">
+    <Key>
+      <PropertyRef Name="car_type_id" />
+    </Key>
+    <Property Name="car_type_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="car_type_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="number_seats" Type="Int32" />
+  </EntityType>
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="customer_id" />
+    </Key>
+    <Property Name="customer_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="name_display" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="full_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="birthday" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="role_id" Type="Int32" />
+    <Property Name="id_number" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="id_frontside" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="id_backside" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="verify_flg" Type="Int32" />
+  </EntityType>
+  <EntityType Name="favorite_car">
+    <Key>
+      <PropertyRef Name="favorite_car_id" />
+    </Key>
+    <Property Name="favorite_car_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="customer_id" Type="Int32" />
+    <Property Name="car_id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="feeback">
+    <Key>
+      <PropertyRef Name="feeback_id" />
+    </Key>
+    <Property Name="feeback_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="rate" Type="Int32" />
+    <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="create_at" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="create_by" Type="Int32" />
+    <Property Name="car_id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="model">
+    <Key>
+      <PropertyRef Name="model_id" />
+    </Key>
+    <Property Name="model_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="model_name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="brand_id" Type="Int32" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="role_id" />
+    </Key>
+    <Property Name="role_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="role_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="vehicle_registration">
+    <Key>
+      <PropertyRef Name="vehicle_registration_id" />
+    </Key>
+    <Property Name="vehicle_registration_id" Type="Int32" Nullable="false" />
+    <Property Name="vehicle_registration_image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="vehicle_inspection_image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityContainer Name="ADDDA_APPEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="address" EntityType="Self.address" />
+    <EntitySet Name="booking" EntityType="Self.booking" />
+    <EntitySet Name="booking_status" EntityType="Self.booking_status" />
+    <EntitySet Name="brand" EntityType="Self.brand" />
+    <EntitySet Name="car" EntityType="Self.car" />
+    <EntitySet Name="car_status" EntityType="Self.car_status" />
+    <EntitySet Name="car_type" EntityType="Self.car_type" />
+    <EntitySet Name="customer" EntityType="Self.customer" />
+    <EntitySet Name="favorite_car" EntityType="Self.favorite_car" />
+    <EntitySet Name="feeback" EntityType="Self.feeback" />
+    <EntitySet Name="model" EntityType="Self.model" />
+    <EntitySet Name="role" EntityType="Self.role" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="vehicle_registration" EntityType="Self.vehicle_registration" />
+  </EntityContainer>
+</Schema>

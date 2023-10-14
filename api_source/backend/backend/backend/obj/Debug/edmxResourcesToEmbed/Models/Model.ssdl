@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ADDDA_APPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="address">
+    <Key>
+      <PropertyRef Name="address_id" />
+    </Key>
+    <Property Name="address_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="address_name" Type="nvarchar" MaxLength="50" />
+    <Property Name="customer_id" Type="int" />
+  </EntityType>
+  <EntityType Name="booking">
+    <Key>
+      <PropertyRef Name="booking_id" />
+    </Key>
+    <Property Name="booking_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="start_date" Type="nvarchar" MaxLength="20" />
+    <Property Name="start_time" Type="nvarchar" MaxLength="20" />
+    <Property Name="end_date" Type="nvarchar" MaxLength="20" />
+    <Property Name="end_time" Type="nvarchar" MaxLength="20" />
+    <Property Name="total" Type="int" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
+    <Property Name="address" Type="nvarchar" MaxLength="255" />
+    <Property Name="complete_flg" Type="int" />
+    <Property Name="boocking_status_id" Type="int" />
+    <Property Name="create_by" Type="int" />
+    <Property Name="car_id" Type="int" />
+  </EntityType>
+  <EntityType Name="booking_status">
+    <Key>
+      <PropertyRef Name="booking_status_id" />
+    </Key>
+    <Property Name="booking_status_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="booking_status_name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="brand">
+    <Key>
+      <PropertyRef Name="brand_id" />
+    </Key>
+    <Property Name="brand_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="brand_name" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="car">
+    <Key>
+      <PropertyRef Name="car_id" />
+    </Key>
+    <Property Name="car_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="price" Type="float" />
+    <Property Name="year_manufacture" Type="int" />
+    <Property Name="number_plate" Type="nvarchar" MaxLength="255" />
+    <Property Name="description" Type="text" />
+    <Property Name="address" Type="nvarchar" MaxLength="255" />
+    <Property Name="image" Type="nvarchar" MaxLength="255" />
+    <Property Name="is_delete" Type="int" />
+    <Property Name="car_status_id" Type="int" />
+    <Property Name="brand_id" Type="int" />
+    <Property Name="model_id" Type="int" />
+    <Property Name="car_type_id" Type="int" />
+    <Property Name="customer_id" Type="int" />
+    <Property Name="vehicle_registration_id" Type="int" />
+  </EntityType>
+  <EntityType Name="car_status">
+    <Key>
+      <PropertyRef Name="car_status_id" />
+    </Key>
+    <Property Name="car_status_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="car_status_name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="car_type">
+    <Key>
+      <PropertyRef Name="car_type_id" />
+    </Key>
+    <Property Name="car_type_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="car_type_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="number_seats" Type="int" />
+  </EntityType>
+  <EntityType Name="customer">
+    <Key>
+      <PropertyRef Name="customer_id" />
+    </Key>
+    <Property Name="customer_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="phone" Type="nvarchar" MaxLength="20" />
+    <Property Name="email" Type="nvarchar" MaxLength="255" />
+    <Property Name="name_display" Type="nvarchar" MaxLength="50" />
+    <Property Name="full_name" Type="nvarchar" MaxLength="50" />
+    <Property Name="birthday" Type="nvarchar" MaxLength="255" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" />
+    <Property Name="role_id" Type="int" />
+    <Property Name="id_number" Type="nvarchar" MaxLength="255" />
+    <Property Name="id_frontside" Type="nvarchar" MaxLength="255" />
+    <Property Name="id_backside" Type="nvarchar" MaxLength="255" />
+    <Property Name="verify_flg" Type="int" />
+  </EntityType>
+  <EntityType Name="favorite_car">
+    <Key>
+      <PropertyRef Name="favorite_car_id" />
+    </Key>
+    <Property Name="favorite_car_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="customer_id" Type="int" />
+    <Property Name="car_id" Type="int" />
+  </EntityType>
+  <EntityType Name="feeback">
+    <Key>
+      <PropertyRef Name="feeback_id" />
+    </Key>
+    <Property Name="feeback_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="rate" Type="int" />
+    <Property Name="comment" Type="text" />
+    <Property Name="create_at" Type="nvarchar" MaxLength="20" />
+    <Property Name="create_by" Type="int" />
+    <Property Name="car_id" Type="int" />
+  </EntityType>
+  <EntityType Name="model">
+    <Key>
+      <PropertyRef Name="model_id" />
+    </Key>
+    <Property Name="model_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="model_name" Type="nvarchar" MaxLength="255" />
+    <Property Name="brand_id" Type="int" />
+  </EntityType>
+  <EntityType Name="role">
+    <Key>
+      <PropertyRef Name="role_id" />
+    </Key>
+    <Property Name="role_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="role_name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="vehicle_registration">
+    <Key>
+      <PropertyRef Name="vehicle_registration_id" />
+    </Key>
+    <Property Name="vehicle_registration_id" Type="int" Nullable="false" />
+    <Property Name="vehicle_registration_image" Type="nvarchar" MaxLength="255" />
+    <Property Name="vehicle_inspection_image" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityContainer Name="ADDDA_APPModelStoreContainer">
+    <EntitySet Name="address" EntityType="Self.address" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="booking" EntityType="Self.booking" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="booking_status" EntityType="Self.booking_status" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="brand" EntityType="Self.brand" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="car" EntityType="Self.car" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="car_status" EntityType="Self.car_status" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="car_type" EntityType="Self.car_type" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="favorite_car" EntityType="Self.favorite_car" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="feeback" EntityType="Self.feeback" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="model" EntityType="Self.model" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="role" EntityType="Self.role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vehicle_registration" EntityType="Self.vehicle_registration" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
