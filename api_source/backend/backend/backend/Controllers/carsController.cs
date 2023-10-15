@@ -17,10 +17,42 @@ namespace backend.Controllers
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
 
         // GET: api/cars
+        [HttpGet]
+        [Route("api/get_all_car")]
         public IQueryable<car> Getcar()
         {
             return db.car;
         }
+
+       /* var result = dbContext.Customers.Join(
+                dbContext.Orders, // Bảng hoặc tập hợp dữ liệu thứ hai
+                customer => customer.CustomerId, // Trường khóa ngoại của bảng thứ nhất
+                order => order.CustomerId, // Trường khóa ngoại của bảng thứ hai
+                (customer, order) => new
+                {
+                    CustomerName = customer.CustomerName,
+                    OrderDate = order.OrderDate
+                }
+            );
+*/
+        // GET: api/cars
+        [HttpGet]
+        [Route("api/get_all_car_search")]
+        public IQueryable<car> GetAllCar(int? typeCar, int? brand, int? model, int? order_by_price, string name )
+        {
+/*            var left = db.car.Join(db.model, car => car.model_id, modell => modell.model_id, (car, modell) => new
+            {
+                car = car.model_id,
+                modell = modell.model_id
+            });
+*/
+            var cars = db.car
+                .Where(item => typeCar == null || item.car_type_id == typeCar)
+                .Where(item => brand == null || item.brand_id == brand)
+                .Where(item => model == null || item.model_id == model);
+            return cars;
+        }
+
 
         // GET: api/cars/5
         [ResponseType(typeof(car))]
