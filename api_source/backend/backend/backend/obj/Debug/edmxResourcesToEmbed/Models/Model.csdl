@@ -57,6 +57,7 @@
     <Property Name="car_type_id" Type="Int32" />
     <Property Name="customer_id" Type="Int32" />
     <Property Name="vehicle_registration_id" Type="Int32" />
+    <Property Name="count_journeys" Type="Int32" />
   </EntityType>
   <EntityType Name="car_status">
     <Key>

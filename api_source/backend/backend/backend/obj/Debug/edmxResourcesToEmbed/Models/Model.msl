@@ -47,6 +47,7 @@
     <EntitySetMapping Name="car">
       <EntityTypeMapping TypeName="ADDDA_APPModel.car">
         <MappingFragment StoreEntitySet="car">
+          <ScalarProperty Name="count_journeys" ColumnName="count_journeys" />
           <ScalarProperty Name="car_id" ColumnName="car_id" />
           <ScalarProperty Name="price" ColumnName="price" />
           <ScalarProperty Name="year_manufacture" ColumnName="year_manufacture" />
