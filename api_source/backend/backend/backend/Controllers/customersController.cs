@@ -67,22 +67,8 @@ namespace backend.Controllers
             LoginStatus loginStatus = new LoginStatus();
             try
             {
-                customer cus = db.customer.FirstOrDefault(c => c.phone == phone);
-                if (cus == null)
-                {
-                    loginStatus.status = 0;
-                    return Ok(loginStatus);
-                }
-                bool isPassword = BCrypt.Net.BCrypt.Verify(password, cus.password);
-                if (isPassword)
-                {
-                    loginStatus.status = 1;
-                    loginStatus.customer_id = cus.customer_id;
-                    return Ok(loginStatus);
-                }
-
-                loginStatus.status = 0;
-                return Ok(loginStatus);
+                LoginService loginService = new LoginService();
+                return Ok(loginService.CheckLogin(phone, password));
             }
             catch (Exception)
             {
