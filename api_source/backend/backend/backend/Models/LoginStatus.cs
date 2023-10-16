@@ -10,5 +10,7 @@ namespace backend.Models
         public int status { get; set; }
         public string token { get; set; }
 
+        public int customer_id { get; set; }
+
     }
 }

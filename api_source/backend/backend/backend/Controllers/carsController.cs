@@ -38,18 +38,37 @@ namespace backend.Controllers
         // GET: api/cars
         [HttpGet]
         [Route("api/get_all_car_search")]
-        public IQueryable<car> GetAllCar(int? typeCar, int? brand, int? model, int? order_by_price, string name )
+        public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, int? model, int? order_by_price, string name )
         {
-/*            var left = db.car.Join(db.model, car => car.model_id, modell => modell.model_id, (car, modell) => new
-            {
-                car = car.model_id,
-                modell = modell.model_id
-            });
-*/
-            var cars = db.car
+            /* var query =( from c in db.car
+                         join m in db.model
+                         on c.model_id equals m.model_id
+                         select new car()
+                         {
+                             car_id = c.car_id,
+                             model_id = c.model_id,
+                             brand_id = c.brand_id,
+                             car_type_id = c.car_type_id
+                         }).ToList();*/
+            var car_view = db.car
+                 .Join(
+                     db.car_type,
+                     c => c.car_type_id,
+                     m => m.car_type_id,
+                     (c, m) => new { c, m }
+                 ).Select(res => new car_view()
+                 {
+                     car_id = res.c.car_id,
+                     model_id = res.c.model_id,
+                     brand_id = res.c.brand_id,
+                     car_type_id = res.c.car_type_id
+
+                 }).ToList();
+
+            var cars = car_view
                 .Where(item => typeCar == null || item.car_type_id == typeCar)
                 .Where(item => brand == null || item.brand_id == brand)
-                .Where(item => model == null || item.model_id == model);
+                .Where(item => model == null || item.model_id == model).ToList();
             return cars;
         }
 

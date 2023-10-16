@@ -176,3 +176,13 @@ C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backe
 C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\obj\Debug\backend.csproj.CopyComplete
 C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\obj\Debug\backend.dll
 C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\obj\Debug\backend.pdb
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\BCrypt.Net-Next.dll
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\System.Buffers.dll
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\System.Memory.dll
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\System.Numerics.Vectors.dll
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\BCrypt.Net-Next.xml
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\System.Buffers.xml
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\System.Memory.xml
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\System.Numerics.Vectors.xml
+C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\bin\System.Runtime.CompilerServices.Unsafe.xml

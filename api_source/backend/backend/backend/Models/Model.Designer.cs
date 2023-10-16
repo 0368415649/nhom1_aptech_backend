@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend\api_source\backend\backend\backend\Models\Model.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Acer\OneDrive\Máy tính\Nhóm1\Source Code\Backend2\nhom1_aptech_backend\api_source\backend\backend\backend\Models\Model.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

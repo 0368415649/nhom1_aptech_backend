@@ -13,6 +13,7 @@ using System.Web.Http.Description;
 using System.Web.SessionState;
 using backend.Common;
 using backend.Models;
+using backend.Service;
 
 namespace backend.Controllers
 {
@@ -41,29 +42,54 @@ namespace backend.Controllers
             return Ok(customer);
         }
 
+        // GET: api/customers/5
+        [ResponseType(typeof(customer))]
+        [HttpGet]
+        [Route("api/check_exists_phone")]
+        public IHttpActionResult CheckExistsPhone(string phone)
+        {
+            int count = db.customer.Where(c => c.phone == phone).Count();
+            if (count > 0)
+            {
+                return Ok(new {status = 1});
+            }
+            return Ok(new { status = 0 });
+        }
+
+
+
         // GET: check Login
         [ResponseType(typeof(customer))]
         [HttpGet]
         [Route("api/check_login")]
         public IHttpActionResult CheckLogin(string phone, string password)
         {
-            LogicCommon logicCommon = new LogicCommon();
             LoginStatus loginStatus = new LoginStatus();
-            customer customer = db.customer.FirstOrDefault(c => c.phone == phone && c.password == password);
-            if (customer == null)
+            try
             {
-                loginStatus.status = 0;
+                customer cus = db.customer.FirstOrDefault(c => c.phone == phone);
+                if (cus == null)
+                {
+                    loginStatus.status = 0;
+                    return Ok(loginStatus);
+                }
+                bool isPassword = BCrypt.Net.BCrypt.Verify(password, cus.password);
+                if (isPassword)
+                {
+                    loginStatus.status = 1;
+                    loginStatus.customer_id = cus.customer_id;
+                    return Ok(loginStatus);
+                }
 
+                loginStatus.status = 0;
                 return Ok(loginStatus);
             }
-            return Ok(customer);
-
-
-            /*loginStatus.status = 1;
-            // Lấy đối tượng từ Session và ép kiểu
-            string token = logicCommon.GenerateRandomString(10);
-            loginStatus.token = token;
-            return Ok(loginStatus);*/
+            catch (Exception)
+            {
+                loginStatus.status = 0;
+                return Ok(loginStatus);
+                throw;
+            }
         }
 
 
@@ -106,18 +132,17 @@ namespace backend.Controllers
         // POST: api/customers
         [ResponseType(typeof(customer))]
         [HttpPost]
-        [Route("api/insert_customer")]
+        [Route("api/register_customer")]
         public IHttpActionResult Postcustomer(customer customer)
         {
             if (!ModelState.IsValid)
             {
-                
                 return Ok(new { Status = 0 });
             }
             try
             {
-                db.customer.Add(customer);
-                db.SaveChanges();
+                RegisterServer registerServer = new RegisterServer();
+                registerServer.registerCustomer(customer);
                 return Ok(new { Status = 1 });
             }
             catch (Exception)
