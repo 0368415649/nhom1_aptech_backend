@@ -92,6 +92,7 @@
           <ScalarProperty Name="full_name" ColumnName="full_name" />
           <ScalarProperty Name="birthday" ColumnName="birthday" />
           <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="sex" ColumnName="sex" />
           <ScalarProperty Name="role_id" ColumnName="role_id" />
           <ScalarProperty Name="id_number" ColumnName="id_number" />
           <ScalarProperty Name="id_frontside" ColumnName="id_frontside" />

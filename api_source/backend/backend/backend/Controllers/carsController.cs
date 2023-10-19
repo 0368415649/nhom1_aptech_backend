@@ -1,89 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
+using System.Xml.Linq;
 using backend.Models;
+using backend.Service;
+using Newtonsoft.Json;
 
 namespace backend.Controllers
 {
     public class carsController : ApiController
     {
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
+        string connstr = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
 
         // GET: api/cars
         [HttpGet]
         [Route("api/get_all_car")]
-        public IQueryable<car> Getcar()
+        public DataTable Getcar()
         {
-            return db.car;
+
+            SqlConnection cnn = new SqlConnection(connstr);
+            string sql = "SELECT * FROM car ";
+            SqlDataAdapter adapter = new SqlDataAdapter(sql, cnn);
+            DataSet ds = new DataSet();
+            adapter.Fill(ds);
+           /* 
+            string jsonData = JsonConvert.SerializeObject(ds.Tables[0]);
+
+            // Tạo một đối tượng HttpResponseMessage
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new StringContent(jsonData, Encoding.UTF8, "application/json");*/
+
+            return ds.Tables[0];
         }
 
-       /* var result = dbContext.Customers.Join(
-                dbContext.Orders, // Bảng hoặc tập hợp dữ liệu thứ hai
-                customer => customer.CustomerId, // Trường khóa ngoại của bảng thứ nhất
-                order => order.CustomerId, // Trường khóa ngoại của bảng thứ hai
-                (customer, order) => new
-                {
-                    CustomerName = customer.CustomerName,
-                    OrderDate = order.OrderDate
-                }
-            );
-*/
+        
+        [ResponseType(typeof(car))]
+        [HttpGet]
+        [Route("api/get_details_car")]
+        public IEnumerable<car_view> Getcar(int id)
+        {
+            CarServer carServer = new CarServer();
+            return carServer.Getcar(id);
+        }
+
         // GET: api/cars
         [HttpGet]
         [Route("api/get_all_car_search")]
-        public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, int? model, int? order_by_price, string name )
+        public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, int? model, string order_by_price, string name)
         {
-            /* var query =( from c in db.car
-                         join m in db.model
-                         on c.model_id equals m.model_id
-                         select new car()
-                         {
-                             car_id = c.car_id,
-                             model_id = c.model_id,
-                             brand_id = c.brand_id,
-                             car_type_id = c.car_type_id
-                         }).ToList();*/
-            var car_view = db.car
-                 .Join(
-                     db.car_type,
-                     c => c.car_type_id,
-                     m => m.car_type_id,
-                     (c, m) => new { c, m }
-                 ).Select(res => new car_view()
-                 {
-                     car_id = res.c.car_id,
-                     model_id = res.c.model_id,
-                     brand_id = res.c.brand_id,
-                     car_type_id = res.c.car_type_id
-
-                 }).ToList();
-
-            var cars = car_view
-                .Where(item => typeCar == null || item.car_type_id == typeCar)
-                .Where(item => brand == null || item.brand_id == brand)
-                .Where(item => model == null || item.model_id == model).ToList();
-            return cars;
-        }
-
-
-        // GET: api/cars/5
-        [ResponseType(typeof(car))]
-        public IHttpActionResult Getcar(int id)
-        {
-            car car = db.car.Find(id);
-            if (car == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(car);
+            CarServer carServer = new CarServer();
+            return carServer.GetAllCar(typeCar, brand, model, order_by_price, name);
         }
 
         // PUT: api/cars/5

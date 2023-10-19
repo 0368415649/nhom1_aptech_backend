@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Remoting.Messaging;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -21,6 +24,7 @@ namespace backend.Controllers
     public class customersController : ApiController
     {
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
+        string connstr = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
 
         // GET: api/customers
         public IQueryable<customer> Getcustomer()
@@ -28,7 +32,6 @@ namespace backend.Controllers
             return db.customer;
         }
 
-        // GET: api/customers/5
         [ResponseType(typeof(customer))]
         [Route("api/get_customer")]
         public IHttpActionResult Getcustomer(int id)
@@ -78,41 +81,138 @@ namespace backend.Controllers
             }
         }
 
-
-        // PUT: api/customers/5
+        // PUT: api/cars/5
         [ResponseType(typeof(void))]
-
-        public IHttpActionResult Putcustomer(int id, customer customer)
+        [HttpPut]
+        [Route("api/change_profile_customer")]
+        public IHttpActionResult Putcar(customer customer)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != customer.customer_id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(customer).State = EntityState.Modified;
-
             try
             {
-                db.SaveChanges();
+                CustomerService customerService = new CustomerService();
+                bool isVerify = customerService.ChangeProfileCustomer(customer);
+                if (isVerify)
+                {
+                    return Ok(new { status = 1 });
+                }
             }
-            catch (DbUpdateConcurrencyException)
+            catch (System.Exception)
             {
-                if (!customerExists(id))
+                return Ok(new { status = 0 });
+                throw;
+            }
+            return Ok(new { status = 0 });
+        }
+
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/change_phone")]
+        public IHttpActionResult ChangePhone(customer customer)
+        {
+            try
+            {
+                CustomerService customerService = new CustomerService();
+                bool isVerify = customerService.ChangePhone(customer);
+                if (isVerify)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    return Ok(new { status = 1 });
                 }
             }
+            catch (System.Exception)
+            {
+                return Ok(new { status = 0 });
+                throw;
+            }
+            return Ok(new { status = 0 });
+        }
 
-            return StatusCode(HttpStatusCode.NoContent);
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/change_mail")]
+        public IHttpActionResult ChangeMail(customer customer)
+        {
+            try
+            {
+                CustomerService customerService = new CustomerService();
+                bool isVerify = customerService.ChangeMail(customer);
+                if (isVerify)
+                {
+                    return Ok(new { status = 1 });
+                }
+            }
+            catch (System.Exception)
+            {
+                return Ok(new { status = 0 });
+                throw;
+            }
+            return Ok(new { status = 0 });
+        }
+
+
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/verify_customer")]
+        public IHttpActionResult VerifyCustomer(customer customer)
+        {
+            try
+            {
+                CustomerService customerService = new CustomerService();
+                bool isVerify = customerService.VerifyCustomer(customer);
+                if (isVerify)
+                {
+                    return Ok(new { status = 1 });
+                }
+            }
+            catch (System.Exception)
+            {
+                return Ok(new { status = 0 });
+                throw;
+            }
+            return Ok(new { status = 0 });
+        }
+
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/invalid_verify_customer")]
+        public IHttpActionResult InvalidVerifyCustomer(customer customer)
+        {
+            try
+            {
+                CustomerService customerService = new CustomerService();
+                bool isVerify = customerService.InvalidVerifyCustomer(customer);
+                if (isVerify)
+                {
+                    return Ok(new { status = 1 });
+                }
+            }
+            catch (System.Exception)
+            {
+                return Ok(new { status = 0 });
+                throw;
+            }
+            return Ok(new { status = 0 });
+        }
+
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/valid_verify_customer")]
+        public IHttpActionResult ValidVerifyCustomer(customer customer)
+        {
+            try
+            {
+                CustomerService customerService = new CustomerService();
+                bool isVerify = customerService.ValidVerifyCustomer(customer);
+                if (isVerify)
+                {
+                    return Ok(new { status = 1 });
+                }
+            }
+            catch (System.Exception)
+            {
+                return Ok(new { status = 0 });
+                throw;
+            }
+            return Ok(new { status = 0 });
         }
 
         // POST: api/customers

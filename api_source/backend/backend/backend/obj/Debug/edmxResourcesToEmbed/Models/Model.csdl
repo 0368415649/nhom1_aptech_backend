@@ -85,6 +85,7 @@
     <Property Name="full_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="birthday" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="sex" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
     <Property Name="role_id" Type="Int32" />
     <Property Name="id_number" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="id_frontside" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />

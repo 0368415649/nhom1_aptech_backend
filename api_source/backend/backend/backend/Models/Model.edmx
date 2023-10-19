@@ -90,7 +90,8 @@
           <Property Name="full_name" Type="nvarchar" MaxLength="50" />
           <Property Name="birthday" Type="nvarchar" MaxLength="255" />
           <Property Name="password" Type="nvarchar" MaxLength="100" />
-          <Property Name="role_id" Type="int" />
+		  <Property Name="sex" Type="nvarchar" MaxLength="10" />
+		  <Property Name="role_id" Type="int" />
           <Property Name="id_number" Type="nvarchar" MaxLength="255" />
           <Property Name="id_frontside" Type="nvarchar" MaxLength="255" />
           <Property Name="id_backside" Type="nvarchar" MaxLength="255" />
@@ -253,7 +254,8 @@
           <Property Name="full_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="birthday" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="role_id" Type="Int32" />
+		  <Property Name="sex" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+		  <Property Name="role_id" Type="Int32" />
           <Property Name="id_number" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="id_frontside" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="id_backside" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -424,6 +426,7 @@
                 <ScalarProperty Name="full_name" ColumnName="full_name" />
                 <ScalarProperty Name="birthday" ColumnName="birthday" />
                 <ScalarProperty Name="password" ColumnName="password" />
+				<ScalarProperty Name="sex" ColumnName="sex" />
                 <ScalarProperty Name="role_id" ColumnName="role_id" />
                 <ScalarProperty Name="id_number" ColumnName="id_number" />
                 <ScalarProperty Name="id_frontside" ColumnName="id_frontside" />
