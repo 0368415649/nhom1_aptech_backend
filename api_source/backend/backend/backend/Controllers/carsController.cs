@@ -57,10 +57,10 @@ namespace backend.Controllers
         // GET: api/cars
         [HttpGet]
         [Route("api/get_all_car_search")]
-        public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, int? model, string order_by_price, string name)
+        public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, string order_by_price, string name)
         {
             CarServer carServer = new CarServer();
-            return carServer.GetAllCar(typeCar, brand, model, order_by_price, name);
+            return carServer.GetAllCar(typeCar, brand, order_by_price, name);
         }
 
         // PUT: api/cars/5
