@@ -12,7 +12,7 @@ namespace backend.Service
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
         string connstr = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
 
-        public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, int? model, string order_by_price, string name)
+        public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, string order_by_price, string name)
         {
             var car_view = db.car
                  .Join(
@@ -29,6 +29,7 @@ namespace backend.Service
                  {
                      car_id = res.cm.c.car_id,
                      model_id = res.cm.c.model_id,
+                     car_type_id = res.cm.c.car_type_id,
                      model_name = res.cm.m.model_name,
                      brand_id = res.cm.c.brand_id,
                      brand_name = res.b.brand_name,
@@ -42,9 +43,7 @@ namespace backend.Service
             var cars = car_view
                 .Where(item => item.model_name.Contains(name ?? ""))
                 .Where(item => typeCar == null || item.car_type_id == typeCar)
-                .Where(item => brand == null || item.brand_id == brand)
-                .Where(item => model == null || item.model_id == model).ToList();
-
+                .Where(item => brand == null || item.brand_id == brand).ToList();
             switch (order_by_price)
             {
                 case "ASC":

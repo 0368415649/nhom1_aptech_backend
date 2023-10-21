@@ -324,6 +324,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Image\Car\" />
+    <Folder Include="Image\Customer\Verify\" />
     <Folder Include="Logic\" />
   </ItemGroup>
   <ItemGroup>

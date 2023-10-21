@@ -5,11 +5,14 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -150,25 +153,89 @@ namespace backend.Controllers
 
 
         [ResponseType(typeof(void))]
-        [HttpPut]
+        [HttpPost]
         [Route("api/verify_customer")]
-        public IHttpActionResult VerifyCustomer(customer customer)
+        public async Task<IHttpActionResult> VerifyCustomer()
         {
             try
             {
-                CustomerService customerService = new CustomerService();
-                bool isVerify = customerService.VerifyCustomer(customer);
-                if (isVerify)
+                int count = HttpContext.Current.Request.Files.Count;
+                LogicCommon logicCommon = new LogicCommon();
+                /*if (!Request.Content.IsMimeMultipartContent())
                 {
+                    throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+                }*/
+                var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/Image/Customer/Verify"));
+                await Request.Content.ReadAsMultipartAsync(provider);
+                List<string> images = new List<string>();
+                var fileData = provider.FileData.FirstOrDefault();
+                var fileName = "";
+                if (fileData != null)
+                {
+                    var originalFileName = fileData.Headers.ContentDisposition.FileName;
+                    fileName = logicCommon.GenerateRandomString(10) + originalFileName.Trim('"');
+                    images.Add(fileName);
+                    var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/"), fileName);
+                    File.Move(fileData.LocalFileName, filePath);
                     return Ok(new { status = 1 });
                 }
+                else
+                {
+                    return Ok(new { status = 0 });
+                }
+               /* customer.id_backside = fileName;
+                CustomerService customerService = new CustomerService();
+                bool isVerify = customerService.VerifyCustomer(customer);*/
+                /*if (isVerify)
+                {
+                    return Ok(new { status = 1 });
+                }*/
             }
-            catch (System.Exception)
+            catch (Exception e)
             {
                 return Ok(new { status = 0 });
-                throw;
             }
             return Ok(new { status = 0 });
+        }
+
+
+        [ResponseType(typeof(void))]
+        [HttpPost]
+        [Route("api/verify_hehe")]
+        public async Task<HttpResponseMessage> UploadImage()
+        {
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/Image/Customer/Verify"));
+            try
+            {
+                await Request.Content.ReadAsMultipartAsync(provider);
+
+                var fileData = provider.FileData.FirstOrDefault();
+                if (fileData != null)
+                {
+                    var originalFileName = fileData.Headers.ContentDisposition.FileName;
+
+                    var fileName = fileData.Headers.ContentDisposition.FileName;
+                    fileName = originalFileName.Trim('"');
+                    var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/"),"mnkdsad" + fileName);
+
+                    File.Move(fileData.LocalFileName, filePath);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, filePath);
+                }
+                else
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "No file uploaded.");
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
+            }
         }
 
         [ResponseType(typeof(void))]
