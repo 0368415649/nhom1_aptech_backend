@@ -159,37 +159,43 @@ namespace backend.Controllers
         {
             try
             {
-                int count = HttpContext.Current.Request.Files.Count;
                 LogicCommon logicCommon = new LogicCommon();
-                /*if (!Request.Content.IsMimeMultipartContent())
-                {
-                    throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-                }*/
                 var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/Image/Customer/Verify"));
                 await Request.Content.ReadAsMultipartAsync(provider);
                 List<string> images = new List<string>();
-                var fileData = provider.FileData.FirstOrDefault();
-                var fileName = "";
-                if (fileData != null)
+                customer cus = new customer();
+                int i = 0;
+                foreach (var fileData in provider.FileData)
                 {
+                    if (fileData == null)
+                    {
+                        return Ok(new { status = 0 });
+                    }
                     var originalFileName = fileData.Headers.ContentDisposition.FileName;
-                    fileName = logicCommon.GenerateRandomString(10) + originalFileName.Trim('"');
+                    var fileName = logicCommon.GenerateRandomString(10) + originalFileName.Trim('"');
                     images.Add(fileName);
                     var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/"), fileName);
                     File.Move(fileData.LocalFileName, filePath);
-                    return Ok(new { status = 1 });
+                    if( i == 0)
+                    {
+                        cus.id_frontside = fileName;
+                    }
+                    else
+                    {
+                        cus.id_backside = fileName;
+                    }
+                    i++;
                 }
-                else
-                {
-                    return Ok(new { status = 0 });
-                }
-               /* customer.id_backside = fileName;
+                cus.full_name = HttpContext.Current.Request.Form["full_name"];
+                cus.id_number = HttpContext.Current.Request.Form["id_number"];
+                cus.birthday = HttpContext.Current.Request.Form["birthday"];
+                cus.customer_id = int.Parse(HttpContext.Current.Request.Form["customer_id"]);
                 CustomerService customerService = new CustomerService();
-                bool isVerify = customerService.VerifyCustomer(customer);*/
-                /*if (isVerify)
+                bool isVerify = customerService.VerifyCustomer(cus);
+                if (isVerify)
                 {
                     return Ok(new { status = 1 });
-                }*/
+                }
             }
             catch (Exception e)
             {
