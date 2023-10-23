@@ -43,5 +43,29 @@ namespace backend.Service
             }
         }
 
+        public bool CheckPassword(int customer_id, string password)
+        {
+            try
+            {
+                customer cus = db.customer.FirstOrDefault(c => c.customer_id == customer_id );
+                if (cus == null)
+                {
+                    return false;
+                }
+                bool isPassword = BCrypt.Net.BCrypt.Verify(password, cus.password);
+                if (isPassword)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+                throw;
+            }
+        }
+
     }
 }

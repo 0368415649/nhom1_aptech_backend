@@ -151,6 +151,54 @@ namespace backend.Controllers
             return Ok(new { status = 0 });
         }
 
+        [ResponseType(typeof(void))]
+        [HttpGet]
+        [Route("api/check_password")]
+        public IHttpActionResult CheckPassword(int customer_id, string password)
+        {
+            Result result = new Result();
+            try
+            {
+                LoginService loginService = new LoginService();
+                bool isVerify = loginService.CheckPassword(customer_id, password);
+                if (isVerify)
+                {
+                    result.status = 1;
+                    return Ok(result);
+                }
+            }
+            catch (System.Exception)
+            {
+                result.status = 0;
+                return Ok(result);
+                throw;
+            }
+            result.status = 0;
+            return Ok(result);
+        }
+
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/change_password")]
+        public IHttpActionResult ChangePassword(customer customer)
+        {
+            try
+            {
+                CustomerService customerService = new CustomerService();
+                bool isVerify = customerService.ChangePassword(customer);
+                if (isVerify)
+                {
+                    return Ok(new { status = 1 });
+                }
+            }
+            catch (System.Exception)
+            {
+                return Ok(new { status = 0 });
+                throw;
+            }
+            return Ok(new { status = 0 });
+        }
+
 
         [ResponseType(typeof(void))]
         [HttpPost]

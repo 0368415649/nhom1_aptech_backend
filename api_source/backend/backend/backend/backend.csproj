@@ -180,6 +180,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Common\LogicCommon.cs" />
+    <Compile Include="Controllers\addressesController.cs" />
     <Compile Include="Controllers\booking_statusController.cs" />
     <Compile Include="Controllers\carsController.cs" />
     <Compile Include="Controllers\customersController.cs" />
@@ -241,6 +242,7 @@
     <Compile Include="Models\role.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Result.cs" />
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>

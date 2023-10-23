@@ -219,5 +219,39 @@ namespace backend.Service
             }
             return false;
         }
+
+        public bool ChangePassword(customer customer)
+        {
+            SqlConnection cnn = new SqlConnection(connstr);
+            try
+            {
+                customer.password = BCrypt.Net.BCrypt.HashPassword(customer.password);
+                StringBuilder sql = new StringBuilder();
+                sql.Append(" UPDATE [customer] SET ");
+                sql.Append(" password = N'" + customer.password + "' ");
+                sql.Append(" WHERE  customer_id  =  " + customer.customer_id);
+
+                if (cnn.State == ConnectionState.Closed)
+                {
+                    cnn.Open();
+                }
+                SqlCommand cmd = cnn.CreateCommand();
+                cmd.Connection = cnn;
+                cmd.CommandText = sql.ToString();
+                cmd.CommandType = CommandType.Text;
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+                throw;
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return false;
+        }
     }
 }
