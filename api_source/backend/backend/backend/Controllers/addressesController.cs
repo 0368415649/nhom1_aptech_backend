@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
 using backend.Models;
@@ -15,8 +18,8 @@ namespace backend.Controllers
     public class addressesController : ApiController
     {
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
+        string connstr = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
 
-        // GET: api/addresses
         public IQueryable<address> Getaddress()
         {
             return db.address;
@@ -24,15 +27,21 @@ namespace backend.Controllers
 
         // GET: api/addresses/5
         [ResponseType(typeof(address))]
-        public IHttpActionResult Getaddress(int id)
+        [HttpGet]
+        [Route("api/show_address")]
+        public IHttpActionResult Getaddress(int customer_id)
         {
-            address address = db.address.Find(id);
-            if (address == null)
+            try
             {
-                return NotFound();
+                List<address> listAddress = db.address.Where(d => d.customer_id == customer_id).ToList();
+                return Ok(listAddress);
             }
-
-            return Ok(address);
+            catch (Exception)
+            {
+                return Ok(new { Status = 0 });
+                throw;
+            }
+            
         }
 
         // PUT: api/addresses/5
@@ -73,7 +82,47 @@ namespace backend.Controllers
         // POST: api/addresses
         [ResponseType(typeof(address))]
         [HttpPost]
+        [Route("api/update_address")]
+
+        public IHttpActionResult UpdateAddress(address address)
+        {
+            SqlConnection cnn = new SqlConnection(connstr);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.Append(" UPDATE [address] SET ");
+                sql.Append(" address_name = N'" + address.address_name + "' ");
+                sql.Append(" WHERE  address_id  =  " + address.address_id);
+                if (cnn.State == ConnectionState.Closed)
+                {
+                    cnn.Open();
+                }
+                SqlCommand cmd = cnn.CreateCommand();
+                cmd.Connection = cnn;
+                cmd.CommandText = sql.ToString();
+                cmd.CommandType = CommandType.Text;
+                cmd.ExecuteNonQuery();
+                return Ok(new { Status = 1 });
+            }
+            catch (System.Exception)
+            {
+                return Ok(new { Status = 0 });
+                throw;
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return Ok(new { Status = 0 });
+
+        }
+
+
+        // POST: api/addresses
+        [ResponseType(typeof(address))]
+        [HttpPost]
         [Route("api/create_address")]
+
         public IHttpActionResult Postaddress(address address)
         {
             try

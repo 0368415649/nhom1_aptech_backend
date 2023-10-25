@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
+using System.Data;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace backend.Service
@@ -102,5 +105,75 @@ namespace backend.Service
                .Where(item => item.car_id == id);
             return cars;
         }
+
+        
+        public bool UpdateCar(car car)
+        {
+            SqlConnection cnn = new SqlConnection(connstr);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.Append(" UPDATE [car] SET ");
+                sql.Append(" price = N'" + car.price + "', ");
+                sql.Append(" address = N'" + car.address + "', ");
+                sql.Append(" description = N'" + car.description + "' ");
+                sql.Append(" WHERE  car_id  =  " + car.car_id);
+                if (cnn.State == ConnectionState.Closed)
+                {
+                    cnn.Open();
+                }
+                SqlCommand cmd = cnn.CreateCommand();
+                cmd.Connection = cnn;
+                cmd.CommandText = sql.ToString();
+                cmd.CommandType = CommandType.Text;
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+                throw;
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return false;
+        }
+
+        public bool DeleteCar(car car)
+        {
+            SqlConnection cnn = new SqlConnection(connstr);
+            try
+            {
+                StringBuilder sql = new StringBuilder();
+                sql.Append(" UPDATE [car] SET ");
+                sql.Append(" is_delete = 1 ");
+                sql.Append(" WHERE  car_id  =  " + car.car_id);
+                if (cnn.State == ConnectionState.Closed)
+                {
+                    cnn.Open();
+                }
+                SqlCommand cmd = cnn.CreateCommand();
+                cmd.Connection = cnn;
+                cmd.CommandText = sql.ToString();
+                cmd.CommandType = CommandType.Text;
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+                throw;
+            }
+            finally
+            {
+                cnn.Close();
+            }
+            return false;
+        }
+
+
+
     }
 }

@@ -182,10 +182,11 @@
     <Compile Include="Common\LogicCommon.cs" />
     <Compile Include="Controllers\addressesController.cs" />
     <Compile Include="Controllers\booking_statusController.cs" />
+    <Compile Include="Controllers\brandsController.cs" />
     <Compile Include="Controllers\carsController.cs" />
     <Compile Include="Controllers\customersController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\modelsController.cs" />
+    <Compile Include="Controllers\vehicle_registrationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -253,45 +253,7 @@ namespace backend.Controllers
         }
 
 
-        [ResponseType(typeof(void))]
-        [HttpPost]
-        [Route("api/verify_hehe")]
-        public async Task<HttpResponseMessage> UploadImage()
-        {
-            if (!Request.Content.IsMimeMultipartContent())
-            {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            }
-
-            var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/Image/Customer/Verify"));
-            try
-            {
-                await Request.Content.ReadAsMultipartAsync(provider);
-
-                var fileData = provider.FileData.FirstOrDefault();
-                if (fileData != null)
-                {
-                    var originalFileName = fileData.Headers.ContentDisposition.FileName;
-
-                    var fileName = fileData.Headers.ContentDisposition.FileName;
-                    fileName = originalFileName.Trim('"');
-                    var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/"),"mnkdsad" + fileName);
-
-                    File.Move(fileData.LocalFileName, filePath);
-
-                    return Request.CreateResponse(HttpStatusCode.OK, filePath);
-                }
-                else
-                {
-                    return Request.CreateResponse(HttpStatusCode.BadRequest, "No file uploaded.");
-                }
-            }
-            catch (Exception e)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, e);
-            }
-        }
-
+     
         [ResponseType(typeof(void))]
         [HttpPut]
         [Route("api/invalid_verify_customer")]
