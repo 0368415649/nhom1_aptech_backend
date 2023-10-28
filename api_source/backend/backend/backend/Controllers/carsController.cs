@@ -102,10 +102,10 @@ namespace backend.Controllers
         {
             try
             {
-            var files = HttpContext.Current.Request.Files["image1"];
+            /*var files = HttpContext.Current.Request.Files["image1"];
             var filePath2 = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"), "haha.jpg");
             files.SaveAs(filePath2);
-            /*var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"), "haha.jpg");
+            *//*var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"), "haha.jpg");
             File.Move(files., filePath);*/
             LogicCommon logicCommon = new LogicCommon();
             var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"));

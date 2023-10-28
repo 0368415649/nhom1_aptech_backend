@@ -184,6 +184,7 @@
     <Compile Include="Controllers\booking_statusController.cs" />
     <Compile Include="Controllers\brandsController.cs" />
     <Compile Include="Controllers\carsController.cs" />
+    <Compile Include="Controllers\car_typeController.cs" />
     <Compile Include="Controllers\customersController.cs" />
     <Compile Include="Controllers\modelsController.cs" />
     <Compile Include="Controllers\vehicle_registrationController.cs" />
