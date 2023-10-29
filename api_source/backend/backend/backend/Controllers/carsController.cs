@@ -123,7 +123,7 @@ namespace backend.Controllers
             foreach (var fileData in provider.FileData)
             {
                 var param = provider.FileData[i].Headers.ContentDisposition.Name.Trim('"');
-                var fileName = logicCommon.GenerateRandomString(5) + "_" + fileData.Headers.ContentDisposition.FileName.Trim('"');
+                var fileName = i.ToString() + logicCommon.GenerateRandomString(5) + "_" + fileData.Headers.ContentDisposition.FileName.Trim('"');
                 var pathName = "~/Image/Car/Image/";
                 switch (param)
                 {
