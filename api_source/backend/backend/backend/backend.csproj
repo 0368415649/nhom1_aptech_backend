@@ -181,6 +181,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Common\LogicCommon.cs" />
     <Compile Include="Controllers\addressesController.cs" />
+    <Compile Include="Controllers\bookingsController.cs" />
     <Compile Include="Controllers\booking_statusController.cs" />
     <Compile Include="Controllers\brandsController.cs" />
     <Compile Include="Controllers\carsController.cs" />

@@ -70,21 +70,6 @@ namespace backend.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/booking_status
-        [ResponseType(typeof(booking_status))]
-        public IHttpActionResult Postbooking_status(booking_status booking_status)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            db.booking_status.Add(booking_status);
-            db.SaveChanges();
-
-            return CreatedAtRoute("DefaultApi", new { id = booking_status.booking_status_id }, booking_status);
-        }
-
         // DELETE: api/booking_status/5
         [ResponseType(typeof(booking_status))]
         public IHttpActionResult Deletebooking_status(int id)

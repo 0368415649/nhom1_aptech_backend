@@ -40,10 +40,12 @@ namespace backend.Service
                      count_journeys = res.cm.c.count_journeys,
                      address = res.cm.c.address,
                      customer_id = res.cm.c.customer_id,
+                     car_status_id = res.cm.c.car_status_id,
                      image = res.cm.c.image
                  }).ToList();
 
             var cars = car_view
+                .Where(item => item.car_status_id == 3)
                 .Where(item => item.model_name.Contains(name ?? ""))
                 .Where(item => typeCar == null || item.car_type_id == typeCar)
                 .Where(item => brand == null || item.brand_id == brand).ToList();
@@ -62,6 +64,49 @@ namespace backend.Service
             return cars;
         }
 
+
+        public IEnumerable<car_view> GetAllMyCar(int? customer_id)
+        {
+            var car_view = db.car
+                 .Join(
+                     db.model,
+                     c => c.model_id,
+                     m => m.model_id,
+                     (c, m) => new { c, m }
+                 ).Join(
+                     db.car_status,
+                     ct => ct.c.car_status_id,
+                     t => t.car_status_id,
+                     (ct, t) => new { ct, t }
+                 ).Join(
+                     db.brand,
+                     cm => cm.ct.c.brand_id,
+                     b => b.brand_id,
+                     (cm, b) => new { cm, b }
+                 ).Select(res => new car_view()
+                 {
+                     car_id = res.cm.ct.c.car_id,
+                     model_id = res.cm.ct.c.model_id,
+                     car_type_id = res.cm.ct.c.car_type_id,
+                     model_name = res.cm.ct.m.model_name,
+                     brand_id = res.cm.ct.c.brand_id,
+                     brand_name = res.b.brand_name,
+                     price = res.cm.ct.c.price,
+                     count_journeys = res.cm.ct.c.count_journeys,
+                     address = res.cm.ct.c.address,
+                     customer_id = res.cm.ct.c.customer_id,
+                     car_status_id = res.cm.ct.c.car_status_id,
+                     car_status_name = res.cm.t.car_status_name,
+                     image = res.cm.ct.c.image
+                 }).ToList();
+
+            var cars = car_view
+                .Where(item => item.customer_id == customer_id).ToList();
+            cars = cars.OrderBy(c => c.car_id).ToList();
+            return cars;
+        }
+
+
         public IEnumerable<car_view> Getcar(int id)
         {
 
@@ -78,7 +123,7 @@ namespace backend.Service
                       (c, b) => new { c, b }
                   ).Join(
                       db.car_type,
-                      c => c.c.c.brand_id,
+                      c => c.c.c.car_type_id,
                       ct => ct.car_type_id,
                       (c, ct) => new { c, ct }
                   ).Select(res => new car_view()
@@ -98,11 +143,10 @@ namespace backend.Service
                       number_plate = res.c.c.c.number_plate,
                       year_manufacture = res.c.c.c.year_manufacture,
                       number_seats = res.ct.number_seats
-
                   }).ToList();
 
             var cars = car_view
-               .Where(item => item.car_id == id);
+               .Where(item => item.car_id == id).ToList();
             return cars;
         }
 

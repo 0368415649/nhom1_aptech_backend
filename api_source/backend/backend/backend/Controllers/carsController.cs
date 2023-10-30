@@ -51,7 +51,16 @@ namespace backend.Controllers
             return carServer.Getcar(id);
         }
 
-        // GET: api/cars
+
+        [HttpGet]
+        [Route("api/get_all_my_car")]
+        public IEnumerable<car_view> GetAllMyCar(int? customer_id)
+        {
+            CarServer carServer = new CarServer();
+            return carServer.GetAllMyCar(customer_id);
+        }
+
+
         [HttpGet]
         [Route("api/get_all_car_search")]
         public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, string order_by_price, string name)
