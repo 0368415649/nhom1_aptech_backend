@@ -54,13 +54,12 @@ namespace backend.Controllers
                     case 1:
                     case 2:
                     case 3:
-                    case 4:
-                    case 5:
+                        bookingFind.complete_flg = 0;
                         break;
                     default:
+                        bookingFind.complete_flg = 1;
                         break;
                 }
-                bookingFind.complete_flg = 1;
                 db.SaveChanges();
                 return Ok(new { status = 1 });
             }
