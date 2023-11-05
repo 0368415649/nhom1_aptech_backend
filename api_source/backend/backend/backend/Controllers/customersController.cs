@@ -252,8 +252,32 @@ namespace backend.Controllers
             return Ok(new { status = 0 });
         }
 
+        [ResponseType(typeof(void))]
+        [HttpPut]
+        [Route("api/change_verify_customer")]
+        public IHttpActionResult ChangeVerifyCustomer(customer customer)
+        {
+            try
+            {
+                if (customer == null || customer.customer_id == null || customer.verify_flg == null)
+                {
+                    return Ok(new { status = 0 });
+                }
+                var customerFind = db.customer.Find(customer.customer_id);
+                customerFind.verify_flg = customer.verify_flg;
+               
+                db.SaveChanges();
+                return Ok(new { status = 1 });
+            }
+            catch (Exception)
+            {
+                return Ok(new { status = 0 });
+                throw;
+            }
+            return Ok(new { status = 0 });
+        }
 
-     
+
         [ResponseType(typeof(void))]
         [HttpPut]
         [Route("api/invalid_verify_customer")]

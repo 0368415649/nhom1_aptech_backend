@@ -20,6 +20,7 @@ namespace backend.Service
             try
             {
                 customer.password = BCrypt.Net.BCrypt.HashPassword(customer.password);
+                customer.verify_flg = 0;
                 db.customer.Add(customer);
                 db.SaveChanges();
             }

@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Web;
+using Microsoft.Ajax.Utilities;
 
 namespace backend.Service
 {
@@ -18,37 +19,66 @@ namespace backend.Service
         public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, string order_by_price, string name)
         {
             var car_view = db.car
-                 .Join(
-                     db.model,
-                     c => c.model_id,
-                     m => m.model_id,
-                     (c, m) => new { c, m }
-                 ).Join(
-                     db.brand,
-                     cm => cm.c.brand_id,
-                     b => b.brand_id,
-                     (cm, b) => new { cm, b }
-                 ).Select(res => new car_view()
-                 {
-                     car_id = res.cm.c.car_id,
-                     model_id = res.cm.c.model_id,
-                     car_type_id = res.cm.c.car_type_id,
-                     model_name = res.cm.m.model_name,
-                     brand_id = res.cm.c.brand_id,
-                     brand_name = res.b.brand_name,
-                     price = res.cm.c.price,
-                     count_journeys = res.cm.c.count_journeys,
-                     address = res.cm.c.address,
-                     customer_id = res.cm.c.customer_id,
-                     car_status_id = res.cm.c.car_status_id,
-                     image = res.cm.c.image
-                 }).ToList();
+                .GroupJoin(
+                    db.model,
+                    c => c.model_id,
+                    m => m.model_id,
+                    (c, modelGroup) => new { c, modelGroup }
+                )
+                .SelectMany(
+                    cm => cm.modelGroup.DefaultIfEmpty(),
+                    (cm, m) => new { cm.c, m }
+                )
+                .GroupJoin(
+                    db.brand,
+                    cm => cm.c.brand_id,
+                    b => b.brand_id,
+                    (cm, brandGroup) => new { cm, brandGroup }
+                )
+                .SelectMany(
+                    cmb => cmb.brandGroup.DefaultIfEmpty(),
+                    (cmb, b) => new { cmb.cm.c, cmb.cm.m, b }
+                ).GroupJoin(
+                    db.booking,
+                    cmbb => cmbb.c.car_id,
+                    book => book.car_id,
+                    (cmbb, bookGroup) => new { cmbb, bookGroup }
+                )
+                .SelectMany(
+                    cmbb => cmbb.bookGroup.DefaultIfEmpty(),
+                    (cmbb, book) => new { cmbb.cmbb.c, cmbb.cmbb.m, cmbb.cmbb.b, book }
+                )
+                .Select(res => new car_view()
+                {
+                    car_id = res.c.car_id,
+                    model_id = res.c.model_id,
+                    car_type_id = res.c.car_type_id,
+                    model_name = res.m != null ? res.m.model_name : null,
+                    brand_id = res.c.brand_id,
+                    brand_name = res.b != null ? res.b.brand_name : null,
+                    price = res.c.price,
+                    count_journeys = res.c.count_journeys,
+                    address = res.c.address,
+                    customer_id = res.c.customer_id,
+                    car_status_id = res.c.car_status_id,
+                    image = res.c.image,
+                    boocking_status_id = res.book.boocking_status_id
+                })
+                .ToList();
+
 
             var cars = car_view
                 .Where(item => item.car_status_id == 3)
+                .Where(item => item.boocking_status_id != 3)
                 .Where(item => item.model_name.Contains(name ?? ""))
                 .Where(item => typeCar == null || item.car_type_id == typeCar)
-                .Where(item => brand == null || item.brand_id == brand).ToList();
+                .Where(item => brand == null || item.brand_id == brand)
+                .GroupBy(item => new
+                {
+                    item.car_id,
+                })
+                .Select(group => group.First())
+                .ToList();
             switch (order_by_price)
             {
                 case "ASC":
@@ -68,40 +98,68 @@ namespace backend.Service
         public IEnumerable<car_view> GetAllMyCar(int? customer_id)
         {
             var car_view = db.car
-                 .Join(
-                     db.model,
-                     c => c.model_id,
-                     m => m.model_id,
-                     (c, m) => new { c, m }
-                 ).Join(
-                     db.car_status,
-                     ct => ct.c.car_status_id,
-                     t => t.car_status_id,
-                     (ct, t) => new { ct, t }
-                 ).Join(
-                     db.brand,
-                     cm => cm.ct.c.brand_id,
-                     b => b.brand_id,
-                     (cm, b) => new { cm, b }
-                 ).Select(res => new car_view()
-                 {
-                     car_id = res.cm.ct.c.car_id,
-                     model_id = res.cm.ct.c.model_id,
-                     car_type_id = res.cm.ct.c.car_type_id,
-                     model_name = res.cm.ct.m.model_name,
-                     brand_id = res.cm.ct.c.brand_id,
-                     brand_name = res.b.brand_name,
-                     price = res.cm.ct.c.price,
-                     count_journeys = res.cm.ct.c.count_journeys,
-                     address = res.cm.ct.c.address,
-                     customer_id = res.cm.ct.c.customer_id,
-                     car_status_id = res.cm.ct.c.car_status_id,
-                     car_status_name = res.cm.t.car_status_name,
-                     image = res.cm.ct.c.image
-                 }).ToList();
+                .GroupJoin(
+                    db.model,
+                    c => c.model_id,
+                    m => m.model_id,
+                    (c, modelGroup) => new { c, modelGroup }
+                )
+                .SelectMany(
+                    cm => cm.modelGroup.DefaultIfEmpty(),
+                    (cm, m) => new { cm.c, m }
+                )
+                .GroupJoin(
+                    db.car_status,
+                    cm => cm.c.car_status_id,
+                    t => t.car_status_id,
+                    (cm, carStatusGroup) => new { cm, carStatusGroup }
+                )
+                .SelectMany(
+                    cmt => cmt.carStatusGroup.DefaultIfEmpty(),
+                    (cmt, t) => new { cmt.cm.c, cmt.cm.m, t }
+                )
+                .GroupJoin(
+                    db.brand,
+                    cmt => cmt.c.brand_id,
+                    b => b.brand_id,
+                    (cmt, brandGroup) => new { cmt, brandGroup }
+                )
+                .SelectMany(
+                    cmtb => cmtb.brandGroup.DefaultIfEmpty(),
+                    (cmtb, b) => new { cmtb.cmt.c, cmtb.cmt.m, cmtb.cmt.t, b }
+                ).GroupJoin(
+                     db.booking.Where(book => book.complete_flg == 0),
+                    cmbb => cmbb.c.car_id,
+                    book => book.car_id,
+                    (cmbb, bookGroup) => new { cmbb, bookGroup }
+                )
+                .SelectMany(
+                    cmbb => cmbb.bookGroup.DefaultIfEmpty(),
+                    (cmbb, book) => new { cmbb.cmbb.c, cmbb.cmbb.m, cmbb.cmbb.t, cmbb.cmbb.b, book }
+                )
+                .Select(res => new car_view()
+                {
+                    car_id = res.c.car_id,
+                    model_id = res.c.model_id,
+                    car_type_id = res.c.car_type_id,
+                    model_name = res.m != null ? res.m.model_name : null,
+                    brand_id = res.c.brand_id,
+                    brand_name = res.b != null ? res.b.brand_name : null,
+                    price = res.c.price,
+                    count_journeys = res.c.count_journeys,
+                    address = res.c.address,
+                    customer_id = res.c.customer_id,
+                    car_status_id = res.c.car_status_id,
+                    car_status_name = res.t != null ? res.t.car_status_name : null,
+                    image = res.c.image,
+                    complete_flg = res.book.complete_flg
+                })
+                .ToList();
+
 
             var cars = car_view
-                .Where(item => item.customer_id == customer_id).ToList();
+                .Where(item => item.customer_id == customer_id)
+                .ToList();
             cars = cars.OrderBy(c => c.car_id).ToList();
             return cars;
         }

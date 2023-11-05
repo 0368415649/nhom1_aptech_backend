@@ -69,40 +69,33 @@ namespace backend.Controllers
             return carServer.GetAllCar(typeCar, brand, order_by_price, name);
         }
 
-        // PUT: api/cars/5
+
         [ResponseType(typeof(void))]
-        public IHttpActionResult Putcar(int id, car car)
+        [HttpPut]
+        [Route("api/change_status_car")]
+        public IHttpActionResult ChangeStatusCar(car car)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            if (id != car.car_id)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(car).State = EntityState.Modified;
-
             try
             {
+                if (car == null || car.car_id == null || car.car_status_id == null)
+                {
+                    return Ok(new { status = 0 });
+                }
+                var carFind = db.car.Find(car.car_id);
+                carFind.car_status_id = car.car_status_id;
                 db.SaveChanges();
+                return Ok(new { status = 1 });
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception)
             {
-                if (!carExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return Ok(new { status = 0 });
+                throw;
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok(new { status = 0 });
         }
+
+
+
 
         [ResponseType(typeof(car))]
         [HttpPost]
