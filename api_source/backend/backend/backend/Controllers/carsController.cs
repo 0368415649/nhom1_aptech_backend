@@ -60,6 +60,14 @@ namespace backend.Controllers
             return carServer.GetAllMyCar(customer_id);
         }
 
+        [HttpGet]
+        [Route("api/get_favorite_car")]
+        public IEnumerable<car_view> GetFavoriteCar(int? customer_id)
+        {
+            CarServer carServer = new CarServer();
+            return carServer.GetFavoriteCar(customer_id);
+        }
+
 
         [HttpGet]
         [Route("api/get_all_car_search")]

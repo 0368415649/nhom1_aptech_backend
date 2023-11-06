@@ -21,6 +21,7 @@ namespace backend.Service
             {
                 customer.password = BCrypt.Net.BCrypt.HashPassword(customer.password);
                 customer.verify_flg = 0;
+                customer.role_id = 1;
                 db.customer.Add(customer);
                 db.SaveChanges();
             }

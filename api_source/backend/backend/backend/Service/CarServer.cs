@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using Microsoft.Ajax.Utilities;
+using System.Xml.Linq;
 
 namespace backend.Service
 {
@@ -94,6 +95,26 @@ namespace backend.Service
             return cars;
         }
 
+        
+        public IEnumerable<car_view> GetFavoriteCar(int? customer_id)
+        {
+            var car_view = GetAllCar(null, null, "", "");
+            car_view.Join(
+                    db.favorite_car,
+                    cv => cv.car_id,
+                    fc => fc.car_id,
+                    (c, modelGroup) => new { c, modelGroup }
+                );
+            car_view = car_view
+               .Where(item => item.car_id == 3)
+               .GroupBy(item => new
+               {
+                   item.car_id,
+               })
+               .Select(group => group.First())
+               .ToList();
+            return car_view;
+        }
 
         public IEnumerable<car_view> GetAllMyCar(int? customer_id)
         {
