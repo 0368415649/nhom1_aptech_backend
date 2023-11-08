@@ -47,7 +47,7 @@
     <Property Name="price" Type="float" />
     <Property Name="year_manufacture" Type="int" />
     <Property Name="number_plate" Type="nvarchar" MaxLength="255" />
-    <Property Name="description" Type="text" />
+    <Property Name="description" Type="nvarchar" MaxLength="255" />
     <Property Name="address" Type="nvarchar" MaxLength="255" />
     <Property Name="image" Type="nvarchar" MaxLength="255" />
     <Property Name="is_delete" Type="int" />

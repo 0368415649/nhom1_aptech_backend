@@ -38,7 +38,7 @@ namespace backend.Controllers
 
         [HttpGet]
         [Route("api/get_booking_user")]
-        public IEnumerable<booking_view> GetBookingUser(int? customer_id, int? status_booking_id)
+        public IEnumerable<booking_view> GetBookingUser(int? customer_id, int? boocking_status_id)
         {
             var booking_view = db.booking
                 .GroupJoin(
@@ -71,6 +71,7 @@ namespace backend.Controllers
                 .ToList();
             var bookings = booking_view
                 .Where(item => item.create_by == customer_id)
+                .Where(item => boocking_status_id == null || boocking_status_id == 0 || item.boocking_status_id == boocking_status_id)
                 .ToList();
             bookings = bookings.OrderBy(c => c.car_id).ToList();
             return bookings;
@@ -78,7 +79,7 @@ namespace backend.Controllers
 
         [HttpGet]
         [Route("api/get_booking_owner")]
-        public IEnumerable<booking_view> GetBookingOwner(int? customer_id)
+        public IEnumerable<booking_view> GetBookingOwner(int? customer_id, int? boocking_status_id)
         {
             var booking_view = db.booking
                 .GroupJoin(
@@ -109,13 +110,11 @@ namespace backend.Controllers
                 .ToList();
             var bookings = booking_view
                 .Where(item => item.owner_id == customer_id)
+                .Where(item => boocking_status_id == null || boocking_status_id == 0 || item.boocking_status_id == boocking_status_id)
                 .ToList();
             bookings = bookings.OrderBy(c => c.car_id).ToList();
             return bookings;
         }
-
-
-
 
         // PUT: api/bookings/5
         [ResponseType(typeof(void))]

@@ -222,7 +222,7 @@ namespace backend.Controllers
                     var originalFileName = fileData.Headers.ContentDisposition.FileName;
                     var fileName = logicCommon.GenerateRandomString(10) + originalFileName.Trim('"');
                     images.Add(fileName);
-                    var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/"), fileName);
+                    var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Customer/Verify"), fileName);
                     File.Move(fileData.LocalFileName, filePath);
                     if( i == 0)
                     {

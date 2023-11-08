@@ -17,7 +17,7 @@ namespace backend.Service
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
         string connstr = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
 
-        public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, string order_by_price, string name)
+        public IEnumerable<car_view> GetAllTableCar()
         {
             var car_view = db.car
                 .GroupJoin(
@@ -66,8 +66,21 @@ namespace backend.Service
                     boocking_status_id = res.book.boocking_status_id
                 })
                 .ToList();
+                var cars = car_view
+                /*.Where(item => item.car_status_id == 3)
+                .Where(item => item.boocking_status_id != 3)*/
+                .GroupBy(item => new
+                {
+                    item.car_id,
+                })
+                .Select(group => group.First())
+                .ToList();
+            return cars;
+        }
 
-
+        public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, string order_by_price, string name)
+        {
+            var car_view = GetAllTableCar();
             var cars = car_view
                 .Where(item => item.car_status_id == 3)
                 .Where(item => item.boocking_status_id != 3)
@@ -98,21 +111,19 @@ namespace backend.Service
         
         public IEnumerable<car_view> GetFavoriteCar(int? customer_id)
         {
-            var car_view = GetAllCar(null, null, "", "");
+            var car_view = GetAllTableCar();
             car_view.Join(
                     db.favorite_car,
                     cv => cv.car_id,
                     fc => fc.car_id,
-                    (c, modelGroup) => new { c, modelGroup }
-                );
-            car_view = car_view
-               .Where(item => item.car_id == 3)
-               .GroupBy(item => new
-               {
-                   item.car_id,
-               })
-               .Select(group => group.First())
-               .ToList();
+                    (c, fc) => new { c, fc }
+                ).Where(item => item.fc.customer_id == customer_id)
+                .GroupBy(item => new
+                {
+                    item.c.car_id,
+                })
+                .Select(group => group.First())
+                .ToList(); ;
             return car_view;
         }
 

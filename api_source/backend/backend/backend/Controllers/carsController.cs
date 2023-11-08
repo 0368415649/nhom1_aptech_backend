@@ -168,10 +168,13 @@ namespace backend.Controllers
                 db.vehicle_registration.Add(vehicle_Registration);
                 db.SaveChanges();
                 /*Add car*/
+                string description = HttpContext.Current.Request.Form["description"];
+                byte[] descriptionBytes = Encoding.UTF8.GetBytes(description);
+                string encodedDescription = Encoding.UTF8.GetString(descriptionBytes);
+                car.description = encodedDescription;
                 car.price = int.Parse(HttpContext.Current.Request.Form["price"]);
                 car.year_manufacture = int.Parse(HttpContext.Current.Request.Form["year_manufacture"]);
                 car.number_plate = HttpContext.Current.Request.Form["number_plate"];
-                car.description = HttpContext.Current.Request.Form["description"];
                 car.address = HttpContext.Current.Request.Form["address"];
                 car.brand_id = int.Parse(HttpContext.Current.Request.Form["brand_id"]);
                 car.model_id = int.Parse(HttpContext.Current.Request.Form["model_id"]);
