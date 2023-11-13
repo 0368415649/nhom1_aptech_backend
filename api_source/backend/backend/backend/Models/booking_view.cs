@@ -17,6 +17,9 @@ namespace backend.Models
         public string address { get; set; }
         public Nullable<int> complete_flg { get; set; }
         public Nullable<int> boocking_status_id { get; set; }
+        public string booking_status_name { get; set; }
+        public string image { get; set; }
+
         public Nullable<int> create_by { get; set; }
         public Nullable<int> car_id { get; set; }
         public Nullable<int> owner_id { get; set; }

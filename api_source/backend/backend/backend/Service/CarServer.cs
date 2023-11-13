@@ -9,10 +9,19 @@ using System.Text;
 using System.Web;
 using Microsoft.Ajax.Utilities;
 using System.Xml.Linq;
+using backend.Service.SeviceInterface;
+using System.Web.Http;
+using System.Collections;
+using backend.Common;
+using backend.Controllers;
+using System.IO;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace backend.Service
 {
-    public class CarServer
+    public class CarServer : ICarServer
     {
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
         string connstr = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
@@ -67,8 +76,6 @@ namespace backend.Service
                 })
                 .ToList();
                 var cars = car_view
-                /*.Where(item => item.car_status_id == 3)
-                .Where(item => item.boocking_status_id != 3)*/
                 .GroupBy(item => new
                 {
                     item.car_id,
@@ -129,6 +136,7 @@ namespace backend.Service
 
         public IEnumerable<car_view> GetAllMyCar(int? customer_id)
         {
+            var cw = GetAllTableCar();
             var car_view = db.car
                 .GroupJoin(
                     db.model,
@@ -307,6 +315,112 @@ namespace backend.Service
             return false;
         }
 
+        public Result ChangeStatusCar(car car)
+        {
+            Result result = new Result();
+            result.status = 0;
+            try
+            {
+                if (car == null || car.car_id == null || car.car_status_id == null)
+                {
+                    return result;
+                }
+                var carFind = db.car.Find(car.car_id);
+                carFind.car_status_id = car.car_status_id;
+                db.SaveChanges();
+                result.status = 1;
+                return result;
+            }
+            catch (Exception)
+            {
+                return result;
+            }
+        }
+
+        public async Task<Result> Postcar(MultipartFormDataStreamProvider provider)
+        {
+            Result result = new Result();
+            result.status = 0;
+            try
+            {
+                /*var files = HttpContext.Current.Request.Files["image1"];
+                var filePath2 = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"), "haha.jpg");
+                files.SaveAs(filePath2);
+                *//*var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"), "haha.jpg");
+                File.Move(files., filePath);*/
+                int i = 0;
+                LogicCommon logicCommon = new LogicCommon();
+                vehicle_registrationController vehicle_RegistrationController = new vehicle_registrationController();
+                int vehicleRegistrationId = vehicle_RegistrationController.Getcar() + 1;
+                car car = new car();
+                List<string> imagesCar = new List<string>();
+                vehicle_registration vehicle_Registration = new vehicle_registration();
+                foreach (var fileData in provider.FileData)
+                {
+                    var param = provider.FileData[i].Headers.ContentDisposition.Name.Trim('"');
+                    var fileName = i.ToString() + logicCommon.GenerateRandomString(5) + "_" + fileData.Headers.ContentDisposition.FileName.Trim('"');
+                    var pathName = "~/Image/Car/Image/";
+                    switch (param)
+                    {
+                        case "image1":
+                        case "image2":
+                        case "image3":
+                        case "image4":
+                            imagesCar.Add(fileName);
+                            pathName = "~/Image/Car/Image/";
+                            break;
+                        case "image5":
+                        case "image6":
+                            if (param == "image5")
+                            {
+                                vehicle_Registration.vehicle_registration_image = fileName;
+                            }
+                            else
+                            {
+                                vehicle_Registration.vehicle_inspection_image = fileName;
+                            }
+                            pathName = "~/Image/Car/Verify/";
+                            break;
+                        default:
+                            break;
+                    }
+                    var filePath = Path.Combine(HttpContext.Current.Server.MapPath(pathName), fileName);
+                    File.Move(fileData.LocalFileName, filePath);
+                    i++;
+                }
+                /*Add vehicle_registrationController*/
+                vehicle_Registration.vehicle_registration_id = vehicleRegistrationId;
+                db.vehicle_registration.Add(vehicle_Registration);
+                db.SaveChanges();
+                /*Add car*/
+                string description = HttpContext.Current.Request.Form["description"];
+                byte[] descriptionBytes = Encoding.UTF8.GetBytes(description);
+                string encodedDescription = Encoding.UTF8.GetString(descriptionBytes);
+                car.description = encodedDescription;
+                car.price = int.Parse(HttpContext.Current.Request.Form["price"]);
+                car.year_manufacture = int.Parse(HttpContext.Current.Request.Form["year_manufacture"]);
+                car.number_plate = HttpContext.Current.Request.Form["number_plate"];
+                car.address = HttpContext.Current.Request.Form["address"];
+                car.brand_id = int.Parse(HttpContext.Current.Request.Form["brand_id"]);
+                car.model_id = int.Parse(HttpContext.Current.Request.Form["model_id"]);
+                car.car_type_id = int.Parse(HttpContext.Current.Request.Form["car_type_id"]);
+                car.customer_id = int.Parse(HttpContext.Current.Request.Form["customer_id"]);
+                car.vehicle_registration_id = vehicleRegistrationId;
+                car.image = string.Join("-", imagesCar); ;
+                car.is_delete = 0;
+                car.car_status_id = 1;
+                car.count_journeys = 0;
+                db.car.Add(car);
+                db.SaveChanges();
+                result.status = 1;
+                return result;
+            }
+            catch (Exception)
+            {
+                return result;
+                throw;
+            }
+        }
 
 
     }

@@ -18,6 +18,7 @@ using System.Xml.Linq;
 using backend.Common;
 using backend.Models;
 using backend.Service;
+using backend.Service.SeviceInterface;
 using Newtonsoft.Json;
 
 namespace backend.Controllers
@@ -27,28 +28,18 @@ namespace backend.Controllers
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
         string connstr = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
 
-        // GET: api/cars
-        [HttpGet]
-        [Route("api/get_all_car")]
-        public DataTable Getcar()
+        ICarServer _iCarServer;
+        public carsController()
         {
-
-            SqlConnection cnn = new SqlConnection(connstr);
-            string sql = "SELECT * FROM car ";
-            SqlDataAdapter adapter = new SqlDataAdapter(sql, cnn);
-            DataSet ds = new DataSet();
-            adapter.Fill(ds);
-            return ds.Tables[0];
+            _iCarServer = new CarServer();
         }
-
         
         [ResponseType(typeof(car))]
         [HttpGet]
         [Route("api/get_details_car")]
         public IEnumerable<car_view> Getcar(int id)
         {
-            CarServer carServer = new CarServer();
-            return carServer.Getcar(id);
+            return _iCarServer.Getcar(id);
         }
 
 
@@ -56,16 +47,14 @@ namespace backend.Controllers
         [Route("api/get_all_my_car")]
         public IEnumerable<car_view> GetAllMyCar(int? customer_id)
         {
-            CarServer carServer = new CarServer();
-            return carServer.GetAllMyCar(customer_id);
+            return _iCarServer.GetAllMyCar(customer_id);
         }
 
         [HttpGet]
         [Route("api/get_favorite_car")]
         public IEnumerable<car_view> GetFavoriteCar(int? customer_id)
         {
-            CarServer carServer = new CarServer();
-            return carServer.GetFavoriteCar(customer_id);
+            return _iCarServer.GetFavoriteCar(customer_id);
         }
 
 
@@ -73,8 +62,7 @@ namespace backend.Controllers
         [Route("api/get_all_car_search")]
         public IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, string order_by_price, string name)
         {
-            CarServer carServer = new CarServer();
-            return carServer.GetAllCar(typeCar, brand, order_by_price, name);
+            return _iCarServer.GetAllCar(typeCar, brand, order_by_price, name);
         }
 
 
@@ -83,27 +71,8 @@ namespace backend.Controllers
         [Route("api/change_status_car")]
         public IHttpActionResult ChangeStatusCar(car car)
         {
-            try
-            {
-                if (car == null || car.car_id == null || car.car_status_id == null)
-                {
-                    return Ok(new { status = 0 });
-                }
-                var carFind = db.car.Find(car.car_id);
-                carFind.car_status_id = car.car_status_id;
-                db.SaveChanges();
-                return Ok(new { status = 1 });
-            }
-            catch (Exception)
-            {
-                return Ok(new { status = 0 });
-                throw;
-            }
-            return Ok(new { status = 0 });
+            return Ok(_iCarServer.ChangeStatusCar(car));
         }
-
-
-
 
         [ResponseType(typeof(car))]
         [HttpPost]
@@ -112,82 +81,10 @@ namespace backend.Controllers
         {
             try
             {
-            /*var files = HttpContext.Current.Request.Files["image1"];
-            var filePath2 = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"), "haha.jpg");
-            files.SaveAs(filePath2);
-            *//*var filePath = Path.Combine(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"), "haha.jpg");
-            File.Move(files., filePath);*/
-            LogicCommon logicCommon = new LogicCommon();
-            var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"));
-            await Request.Content.ReadAsMultipartAsync(provider);
-            if (provider.FileData == null)
-            {
-                return Ok(new { status = 0 });
-            }
-            int i = 0;
-            vehicle_registrationController vehicle_RegistrationController = new vehicle_registrationController();
-            vehicle_registration vehicle_Registration = new vehicle_registration();
-            int vehicleRegistrationId = vehicle_RegistrationController.Getcar() + 1;
-            car car = new car();
-            List<string> imagesCar = new List<string>();
-            foreach (var fileData in provider.FileData)
-            {
-                var param = provider.FileData[i].Headers.ContentDisposition.Name.Trim('"');
-                var fileName = i.ToString() + logicCommon.GenerateRandomString(5) + "_" + fileData.Headers.ContentDisposition.FileName.Trim('"');
-                var pathName = "~/Image/Car/Image/";
-                switch (param)
-                {
-                        case "image1":
-                        case "image2":
-                        case "image3":
-                        case "image4":
-                            imagesCar.Add(fileName);
-                            pathName = "~/Image/Car/Image/";
-                            break;
-                        case "image5":
-                        case "image6":
-                            if (param == "image5")
-                            {
-                                vehicle_Registration.vehicle_registration_image = fileName;
-                            }
-                            else
-                            {
-                                vehicle_Registration.vehicle_inspection_image = fileName;
-                            }
-                            pathName = "~/Image/Car/Verify/";
-                            break;
-                        default:
-                            break;
-                }
-                var filePath = Path.Combine(HttpContext.Current.Server.MapPath(pathName), fileName);
-                File.Move(fileData.LocalFileName, filePath);
-                i++;
-            }
-                /*Add vehicle_registrationController*/
-                vehicle_Registration.vehicle_registration_id = vehicleRegistrationId;
-                db.vehicle_registration.Add(vehicle_Registration);
-                db.SaveChanges();
-                /*Add car*/
-                string description = HttpContext.Current.Request.Form["description"];
-                byte[] descriptionBytes = Encoding.UTF8.GetBytes(description);
-                string encodedDescription = Encoding.UTF8.GetString(descriptionBytes);
-                car.description = encodedDescription;
-                car.price = int.Parse(HttpContext.Current.Request.Form["price"]);
-                car.year_manufacture = int.Parse(HttpContext.Current.Request.Form["year_manufacture"]);
-                car.number_plate = HttpContext.Current.Request.Form["number_plate"];
-                car.address = HttpContext.Current.Request.Form["address"];
-                car.brand_id = int.Parse(HttpContext.Current.Request.Form["brand_id"]);
-                car.model_id = int.Parse(HttpContext.Current.Request.Form["model_id"]);
-                car.car_type_id = int.Parse(HttpContext.Current.Request.Form["car_type_id"]);
-                car.customer_id = int.Parse(HttpContext.Current.Request.Form["customer_id"]);
-                car.vehicle_registration_id = vehicleRegistrationId;
-                car.image = string.Join("-", imagesCar); ;
-                car.is_delete = 0;
-                car.car_status_id = 1;
-                car.count_journeys = 0;
-                db.car.Add(car);
-                db.SaveChanges();
-                return Ok(new { status = 1 });
+                
+                var provider = new MultipartFormDataStreamProvider(HttpContext.Current.Server.MapPath("~/Image/Car/Verify"));
+                await Request.Content.ReadAsMultipartAsync(provider);
+                return Ok(_iCarServer.Postcar(provider));
             }
             catch (Exception)
             {

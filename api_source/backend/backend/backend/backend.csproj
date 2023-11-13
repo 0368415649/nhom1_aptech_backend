@@ -259,6 +259,7 @@
     <Compile Include="Service\CustomerService.cs" />
     <Compile Include="Service\LoginService.cs" />
     <Compile Include="Service\RegisterServer.cs" />
+    <Compile Include="Service\SeviceInterface\ICarServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

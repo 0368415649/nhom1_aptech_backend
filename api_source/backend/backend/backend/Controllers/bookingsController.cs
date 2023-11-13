@@ -51,6 +51,16 @@ namespace backend.Controllers
                     bkc => bkc.cGroup.DefaultIfEmpty(),
                     (bkc, c) => new { bkc.bk, c }
                 )
+                .GroupJoin(
+                    db.car,
+                    bkkk => bkkk.bk.car_id,
+                    ca => ca.car_id,
+                    (bkkk, caGroup) => new { bkkk, caGroup }
+                )
+                .SelectMany(
+                    bkkk => bkkk.caGroup.DefaultIfEmpty(),
+                    (bkkk, ca) => new { bkkk.bkkk.c, bkkk.bkkk.bk, ca }
+                )
                 .Select(res => new booking_view()
                 {
                     booking_id = res.bk.booking_id,
@@ -65,6 +75,7 @@ namespace backend.Controllers
                     boocking_status_id = res.bk.boocking_status_id,
                     create_by = res.bk.create_by,
                     car_id = res.bk.car_id,
+                    image = res.ca.image,
                     phone = res.c.phone,
                     full_name = res.c.full_name
                 })
@@ -91,6 +102,16 @@ namespace backend.Controllers
                 .SelectMany(
                     bkc => bkc.cGroup.DefaultIfEmpty(),
                     (bkc, c) => new { bkc.bk, c }
+                )
+                .GroupJoin(
+                    db.car,
+                    bkkk => bkkk.bk.car_id,
+                    ca => ca.car_id,
+                    (bkkk, caGroup) => new { bkkk, caGroup }
+                )
+                .SelectMany(
+                    bkkk => bkkk.caGroup.DefaultIfEmpty(),
+                    (bkkk, ca) => new { bkkk.bkkk.c, bkkk.bkkk.bk, ca }
                 ).Select(res => new booking_view()
                 {
                     booking_id = res.bk.booking_id,
@@ -105,7 +126,8 @@ namespace backend.Controllers
                     boocking_status_id = res.bk.boocking_status_id,
                     create_by = res.bk.create_by,
                     car_id = res.bk.car_id,
-                    owner_id = res.c.customer_id
+                    owner_id = res.c.customer_id,
+                    image = res.ca.image
                 })
                 .ToList();
             var bookings = booking_view
