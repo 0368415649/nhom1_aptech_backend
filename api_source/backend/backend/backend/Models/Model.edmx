@@ -275,7 +275,7 @@
           </Key>
           <Property Name="feeback_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="rate" Type="Int32" />
-          <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="create_at" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="create_by" Type="Int32" />
           <Property Name="car_id" Type="Int32" />
