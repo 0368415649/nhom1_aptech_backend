@@ -111,27 +111,33 @@ namespace backend.Service
                 default:
                     break;
             }
-
             return cars;
         }
 
         
         public IEnumerable<car_view> GetFavoriteCar(int? customer_id)
         {
-            var car_view = GetAllTableCar();
-            car_view.Join(
-                    db.favorite_car,
-                    cv => cv.car_id,
-                    fc => fc.car_id,
-                    (c, fc) => new { c, fc }
-                ).Where(item => item.fc.customer_id == customer_id)
-                .GroupBy(item => new
-                {
-                    item.c.car_id,
-                })
-                .Select(group => group.First())
-                .ToList(); ;
-            return car_view;
+            var result = from fc in db.favorite_car
+                         join c in db.car on fc.car_id equals c.car_id
+                         join b in db.brand on c.brand_id equals b.brand_id
+                         join m in db.model on c.model_id equals m.model_id
+                         where fc.customer_id == 1
+                         select new car_view()
+                         {
+                             car_id = c.car_id,
+                             model_id = c.model_id,
+                             car_type_id = c.car_type_id,
+                             model_name = m != null ? m.model_name : null,
+                             brand_id = c.brand_id,
+                             brand_name = b != null ? b.brand_name : null,
+                             price = c.price,
+                             count_journeys = c.count_journeys,
+                             address = c.address,
+                             customer_id = c.customer_id,
+                             car_status_id = c.car_status_id,
+                             image = c.image,
+                         };
+            return result;
         }
 
         public IEnumerable<car_view> GetAllMyCar(int? customer_id)

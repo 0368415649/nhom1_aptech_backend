@@ -92,19 +92,29 @@ namespace backend.Controllers
         }
 
         // DELETE: api/favorite_car/5
+        [HttpDelete]
+        [Route("api/delete_favorite_car")]
         [ResponseType(typeof(favorite_car))]
-        public IHttpActionResult Deletefavorite_car(int id)
+        public IHttpActionResult Deletefavorite_car(int favorite_car_id)
         {
-            favorite_car favorite_car = db.favorite_car.Find(id);
-            if (favorite_car == null)
+            try
             {
-                return NotFound();
+                favorite_car favorite_car = db.favorite_car.Find(favorite_car_id);
+                if (favorite_car == null)
+                {
+                    return NotFound();
+                }
+
+                db.favorite_car.Remove(favorite_car);
+                db.SaveChanges();
+                return Ok(new { status = 1 });
             }
-
-            db.favorite_car.Remove(favorite_car);
-            db.SaveChanges();
-
-            return Ok(favorite_car);
+            catch (Exception)
+            {
+                return Ok(new { status = 0 });
+                throw;
+            }
+            
         }
 
         protected override void Dispose(bool disposing)

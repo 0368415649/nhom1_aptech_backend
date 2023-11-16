@@ -24,6 +24,7 @@ namespace backend.Models
         public Nullable<int> car_type_id { get; set; }
         public string car_type_name { get; set; }
         public Nullable<int> customer_id { get; set; }
+        public Nullable<int> customer_id_favorite { get; set; }
         public string name_display { get; set; }
         public Nullable<int> vehicle_registration_id { get; set; }
         public string vehicle_registration_image { get; set; }

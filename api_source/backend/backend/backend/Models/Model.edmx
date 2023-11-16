@@ -111,7 +111,7 @@
           </Key>
           <Property Name="feeback_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="rate" Type="int" />
-          <Property Name="comment" Type="text" />
+          <Property Name="comment" Type="nvarchar" MaxLength="255"  />
           <Property Name="create_at" Type="nvarchar" MaxLength="20" />
           <Property Name="create_by" Type="int" />
           <Property Name="car_id" Type="int" />

@@ -139,7 +139,7 @@ namespace backend.Controllers
             }
             catch (Exception)
             {
-                return Ok(new { Status = 1 });
+                return Ok(new { Status = 0 });
                 throw;
             }
             

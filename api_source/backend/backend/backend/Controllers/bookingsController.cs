@@ -61,6 +61,16 @@ namespace backend.Controllers
                     bkkk => bkkk.caGroup.DefaultIfEmpty(),
                     (bkkk, ca) => new { bkkk.bkkk.c, bkkk.bkkk.bk, ca }
                 )
+                .GroupJoin(
+                    db.model,
+                    bkkk => bkkk.ca.model_id,
+                    model => model.model_id,
+                    (bkkk, model) => new { bkkk, model }
+                )
+                .SelectMany(
+                    bkkk => bkkk.model.DefaultIfEmpty(),
+                    (bkkk, model) => new { bkkk.bkkk.c, bkkk.bkkk.bk, bkkk.bkkk.ca, model }
+                )
                 .Select(res => new booking_view()
                 {
                     booking_id = res.bk.booking_id,
@@ -77,7 +87,8 @@ namespace backend.Controllers
                     car_id = res.bk.car_id,
                     image = res.ca.image,
                     phone = res.c.phone,
-                    full_name = res.c.full_name
+                    full_name = res.c.full_name,
+                    model_name = res.model.model_name
                 })
                 .ToList();
             var bookings = booking_view
@@ -104,9 +115,9 @@ namespace backend.Controllers
                     (bkc, c) => new { bkc.bk, c }
                 )
                 .GroupJoin(
-                    db.car,
-                    bkkk => bkkk.bk.car_id,
-                    ca => ca.car_id,
+                    db.model,
+                    bkkk => bkkk.c.model_id,
+                    ca => ca.model_id,
                     (bkkk, caGroup) => new { bkkk, caGroup }
                 )
                 .SelectMany(
@@ -127,7 +138,8 @@ namespace backend.Controllers
                     create_by = res.bk.create_by,
                     car_id = res.bk.car_id,
                     owner_id = res.c.customer_id,
-                    image = res.ca.image
+                    image = res.c.image,
+                    model_name = res.ca.model_name,
                 })
                 .ToList();
             var bookings = booking_view

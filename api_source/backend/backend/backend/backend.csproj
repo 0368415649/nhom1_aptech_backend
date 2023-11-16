@@ -188,6 +188,7 @@
     <Compile Include="Controllers\car_typeController.cs" />
     <Compile Include="Controllers\customersController.cs" />
     <Compile Include="Controllers\favorite_carController.cs" />
+    <Compile Include="Controllers\feebacksController.cs" />
     <Compile Include="Controllers\modelsController.cs" />
     <Compile Include="Controllers\vehicle_registrationController.cs" />
     <Compile Include="Global.asax.cs">

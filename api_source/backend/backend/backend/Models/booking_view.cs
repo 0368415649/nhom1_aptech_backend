@@ -35,5 +35,6 @@ namespace backend.Models
         public string id_frontside { get; set; }
         public string id_backside { get; set; }
         public Nullable<int> verify_flg { get; set; }
+        public string model_name { get; set; }
     }
 }
