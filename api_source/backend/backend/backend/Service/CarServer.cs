@@ -136,6 +136,7 @@ namespace backend.Service
                              customer_id = c.customer_id,
                              car_status_id = c.car_status_id,
                              image = c.image,
+                             favorite_car_id = fc.favorite_car_id
                          };
             return result;
         }
