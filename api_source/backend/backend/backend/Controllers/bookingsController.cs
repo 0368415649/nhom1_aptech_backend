@@ -40,6 +40,11 @@ namespace backend.Controllers
         [Route("api/get_booking_user")]
         public IEnumerable<booking_view> GetBookingUser(int? customer_id, int? boocking_status_id)
         {
+            var check = false;
+            if (boocking_status_id == 4)
+            {
+                check = true;
+            }
             var booking_view = db.booking
                 .GroupJoin(
                     db.customer,
@@ -92,9 +97,17 @@ namespace backend.Controllers
                 })
                 .ToList();
             var bookings = booking_view
-                .Where(item => item.create_by == customer_id)
-                .Where(item => boocking_status_id == null || boocking_status_id == 0 || item.boocking_status_id == boocking_status_id)
-                .ToList();
+                .Where(item => item.create_by == customer_id);
+                if (check)
+                {
+                bookings = bookings
+                .Where(item => item.boocking_status_id == 4 || item.boocking_status_id == 7 ) ;
+                }
+                else
+                {
+                bookings = bookings
+                .Where(item => boocking_status_id == null || boocking_status_id == 0 || item.boocking_status_id == boocking_status_id);
+                }
             bookings = bookings.OrderBy(c => c.car_id).ToList();
             return bookings;
         }

@@ -37,9 +37,9 @@ namespace backend.Controllers
         [ResponseType(typeof(car))]
         [HttpGet]
         [Route("api/get_details_car")]
-        public IEnumerable<car_view> Getcar(int id)
+        public IEnumerable<car_view> Getcar(int id, int? customer_id)
         {
-            return _iCarServer.Getcar(id);
+            return _iCarServer.Getcar(id, customer_id);
         }
 
 

@@ -18,6 +18,8 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
+using System.Dynamic;
 
 namespace backend.Service
 {
@@ -121,7 +123,7 @@ namespace backend.Service
                          join c in db.car on fc.car_id equals c.car_id
                          join b in db.brand on c.brand_id equals b.brand_id
                          join m in db.model on c.model_id equals m.model_id
-                         where fc.customer_id == 1
+                         where fc.customer_id == customer_id
                          select new car_view()
                          {
                              car_id = c.car_id,
@@ -141,9 +143,13 @@ namespace backend.Service
             return result;
         }
 
+
         public IEnumerable<car_view> GetAllMyCar(int? customer_id)
         {
-            var cw = GetAllTableCar();
+           /* var cw = GetFavoriteCar(customer_id);
+            // Lấy danh sách car_id
+            List<int> carIds = cw.Select(car => car.car_id).ToList();*/
+
             var car_view = db.car
                 .GroupJoin(
                     db.model,
@@ -199,7 +205,8 @@ namespace backend.Service
                     car_status_id = res.c.car_status_id,
                     car_status_name = res.t != null ? res.t.car_status_name : null,
                     image = res.c.image,
-                    complete_flg = res.book.complete_flg
+                    complete_flg = res.book.complete_flg,
+                    description = res.c.image != null ? "f" : "f"
                 })
                 .ToList();
 
@@ -212,45 +219,34 @@ namespace backend.Service
         }
 
 
-        public IEnumerable<car_view> Getcar(int id)
+        public IEnumerable<car_view> Getcar(int id, int? customer_id)
         {
-
-            var car_view = db.car
-                  .Join(
-                      db.model,
-                      c => c.model_id,
-                      m => m.model_id,
-                      (c, m) => new { c, m }
-                  ).Join(
-                      db.brand,
-                      c => c.c.brand_id,
-                      b => b.brand_id,
-                      (c, b) => new { c, b }
-                  ).Join(
-                      db.car_type,
-                      c => c.c.c.car_type_id,
-                      ct => ct.car_type_id,
-                      (c, ct) => new { c, ct }
-                  ).Select(res => new car_view()
-                  {
-                      car_id = res.c.c.c.car_id,
-                      model_id = res.c.c.c.model_id,
-                      model_name = res.c.c.m.model_name,
-                      brand_id = res.c.c.c.brand_id,
-                      brand_name = res.c.b.brand_name,
-                      price = res.c.c.c.price,
-                      count_journeys = res.c.c.c.count_journeys,
-                      address = res.c.c.c.address,
-                      customer_id = res.c.c.c.customer_id,
-                      image = res.c.c.c.image,
-                      description = res.c.c.c.description,
-                      rate = 5,
-                      number_plate = res.c.c.c.number_plate,
-                      year_manufacture = res.c.c.c.year_manufacture,
-                      number_seats = res.ct.number_seats
-                  }).ToList();
-
-            var cars = car_view
+            var result = from c in db.car
+                         join m in db.model on c.model_id equals m.model_id
+                         join b in db.brand on c.brand_id equals b.brand_id
+                         join ct in db.car_type on c.car_type_id equals ct.car_type_id
+                         join fc in db.favorite_car.Where(fc => fc.customer_id == 1) on c.car_id equals fc.car_id into fcGroup
+                         from fc in fcGroup.DefaultIfEmpty()
+                         select new car_view()
+                         {
+                             car_id = c.car_id,
+                             model_id = c.model_id,
+                             model_name = m.model_name,
+                             brand_id = c.brand_id,
+                             brand_name = b.brand_name,
+                             price = c.price,
+                             count_journeys = c.count_journeys,
+                             address = c.address,
+                             customer_id = c.customer_id,
+                             image = c.image,
+                             description = c.description,
+                             rate = 5,
+                             number_plate = c.number_plate,
+                             year_manufacture = c.year_manufacture,
+                             number_seats = ct.number_seats,
+                             favorite_car_id = fc.favorite_car_id
+                         };
+            var cars = result
                .Where(item => item.car_id == id).ToList();
             return cars;
         }

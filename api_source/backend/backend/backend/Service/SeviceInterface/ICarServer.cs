@@ -17,7 +17,7 @@ namespace backend.Service.SeviceInterface
         IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, string order_by_price, string name);
         IEnumerable<car_view> GetFavoriteCar(int? customer_id);
         IEnumerable<car_view> GetAllMyCar(int? customer_id);
-        IEnumerable<car_view> Getcar(int id);
+        IEnumerable<car_view> Getcar(int id, int? customer_id);
         Result ChangeStatusCar(car car);
         Task<Result> Postcar(MultipartFormDataStreamProvider fileData);
 

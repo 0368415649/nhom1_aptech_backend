@@ -226,6 +226,7 @@
     <Compile Include="Models\feeback.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\feeback_view.cs" />
     <Compile Include="Models\LoginStatus.cs" />
     <Compile Include="Models\Model.Context.cs">
       <AutoGen>True</AutoGen>

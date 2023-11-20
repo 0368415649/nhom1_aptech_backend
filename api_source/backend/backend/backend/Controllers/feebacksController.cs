@@ -23,6 +23,37 @@ namespace backend.Controllers
         }
 
         [ResponseType(typeof(address))]
+        [HttpGet]
+        [Route("api/get_list_feeback")]
+        [ResponseType(typeof(feeback))]
+        public IHttpActionResult GetListeeback(int car_id)
+        {
+            try
+            {
+                var listFeeback = db.feeback;
+                var result = from fb in db.feeback
+                             join cs in db.customer on fb.create_by equals cs.customer_id
+                             where fb.car_id == car_id
+                             select new feeback_view()
+                             {
+                                feeback_id = fb.feeback_id,
+                                rate = fb.rate,
+                                comment = fb.comment,
+                                create_at = fb.create_at,
+                                create_by = fb.create_by,
+                                car_id = fb.car_id,
+                                name_display = cs.name_display
+                             };
+                return Ok(result);
+            }
+            catch (Exception)
+            {
+                return Ok(new { Status = 0 });
+                throw;
+            }
+        }
+
+        [ResponseType(typeof(address))]
         [HttpPost]
         [Route("api/create_feeback")]
         [ResponseType(typeof(feeback))]
