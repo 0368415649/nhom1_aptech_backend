@@ -221,11 +221,29 @@ namespace backend.Service
 
         public IEnumerable<car_view> Getcar(int id, int? customer_id)
         {
+            /* int count = db.feeback.Count(f => f.car_id == 4);*/
+            var feedbackStatistics = db.feeback
+                .Where(f => f.car_id == id)
+                .GroupBy(f => 1)
+                .Select(g => new
+                {
+                    count = g.Count(),
+                    averageRate = g.Average(f => f.rate)
+                })
+                .FirstOrDefault();
+            int count = 0;
+            double avgRate = 0;
+            if(feedbackStatistics != null)
+            {
+                count = feedbackStatistics.count;
+                avgRate = (double) feedbackStatistics.averageRate;
+            }
+
             var result = from c in db.car
                          join m in db.model on c.model_id equals m.model_id
                          join b in db.brand on c.brand_id equals b.brand_id
                          join ct in db.car_type on c.car_type_id equals ct.car_type_id
-                         join fc in db.favorite_car.Where(fc => fc.customer_id == 1) on c.car_id equals fc.car_id into fcGroup
+                         join fc in db.favorite_car.Where(fc => fc.customer_id == customer_id) on c.car_id equals fc.car_id into fcGroup
                          from fc in fcGroup.DefaultIfEmpty()
                          select new car_view()
                          {
@@ -244,7 +262,9 @@ namespace backend.Service
                              number_plate = c.number_plate,
                              year_manufacture = c.year_manufacture,
                              number_seats = ct.number_seats,
-                             favorite_car_id = fc.favorite_car_id
+                             favorite_car_id = fc.favorite_car_id,
+                             count_comment = count,
+                             rate_avg = avgRate
                          };
             var cars = result
                .Where(item => item.car_id == id).ToList();

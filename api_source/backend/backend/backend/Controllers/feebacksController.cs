@@ -30,7 +30,6 @@ namespace backend.Controllers
         {
             try
             {
-                var listFeeback = db.feeback;
                 var result = from fb in db.feeback
                              join cs in db.customer on fb.create_by equals cs.customer_id
                              where fb.car_id == car_id

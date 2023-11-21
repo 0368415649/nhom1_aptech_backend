@@ -39,13 +39,33 @@ namespace backend.Controllers
         [Route("api/get_customer")]
         public IHttpActionResult Getcustomer(int id)
         {
+            var countCar = db.car
+                .Where(c => c.customer_id == id)
+                .Select(c => (int?)c.count_journeys) // Chuyển đổi sang kiểu int? để xử lý trường hợp có giá trị null
+                .DefaultIfEmpty(0) // Đặt giá trị mặc định là 0 nếu không có giá trị
+                .Sum();
             customer customer = db.customer.Find(id);
             if (customer == null)
             {
                 return NotFound();
             }
 
-            return Ok(customer);
+            customer_view customer_view = new customer_view();
+            customer_view.customer_id = customer.customer_id;
+            customer_view.phone = customer.phone;
+            customer_view.email = customer.email;
+            customer_view.name_display = customer.name_display;
+            customer_view.full_name = customer.full_name;
+            customer_view.birthday = customer.birthday;
+            customer_view.password = customer.password;
+            customer_view.sex = customer.sex;
+            customer_view.role_id = customer.role_id;
+            customer_view.id_number = customer.id_number;
+            customer_view.id_frontside = customer.id_frontside;
+            customer_view.id_backside = customer.id_backside;
+            customer_view.verify_flg = customer.verify_flg;
+            customer_view.count = countCar;
+            return Ok(customer_view);
         }
 
         // GET: api/customers/5

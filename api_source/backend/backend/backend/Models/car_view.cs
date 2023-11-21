@@ -35,6 +35,8 @@ namespace backend.Models
         public Nullable<int> boocking_status_id { get; set; }
         public Nullable<int> complete_flg { get; set; }
         public Nullable<int> favorite_car_id { get; set; }
+        public Nullable<int> count_comment { get; set; }
+        public Nullable<double> rate_avg { get; set; }
 
 
     }

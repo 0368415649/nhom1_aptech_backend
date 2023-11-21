@@ -220,6 +220,7 @@
     <Compile Include="Models\customer.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\customer_view.cs" />
     <Compile Include="Models\favorite_car.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
