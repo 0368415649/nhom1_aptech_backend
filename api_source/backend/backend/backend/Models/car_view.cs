@@ -30,7 +30,7 @@ namespace backend.Models
         public string vehicle_registration_image { get; set; }
         public string vehicle_inspection_image { get; set; }
         public Nullable<int> count_journeys { get; set; }
-        public Nullable<int> rate { get; set; }
+        public Nullable<double> rate { get; set; }
         public Nullable<int> number_seats { get; set; }
         public Nullable<int> boocking_status_id { get; set; }
         public Nullable<int> complete_flg { get; set; }

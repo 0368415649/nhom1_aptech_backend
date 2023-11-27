@@ -10,12 +10,14 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using System.Xml.Linq;
 using backend.Models;
+using backend.Service;
 
 namespace backend.Controllers
 {
     public class bookingsController : ApiController
     {
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
+        CarServer carServer = new CarServer();
 
         // GET: api/bookings
         public IQueryable<booking> Getbooking()
@@ -166,7 +168,7 @@ namespace backend.Controllers
         // PUT: api/bookings/5
         [ResponseType(typeof(void))]
         [HttpPut]
-        [Route("api/change_status_booking")]
+        [Route("api/    ")]
         public IHttpActionResult CancelBooking(booking booking)
         {
             try
@@ -185,6 +187,11 @@ namespace backend.Controllers
                         bookingFind.complete_flg = 0;
                         break;
                     default:
+                        if(booking.boocking_status_id == 4)
+                        {
+                             int? car_id = bookingFind.car_id;
+                            carServer.ChangeCarJourneys(car_id);
+                        }
                         bookingFind.complete_flg = 1;
                         break;
                 }

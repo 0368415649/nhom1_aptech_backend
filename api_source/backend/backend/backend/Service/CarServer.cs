@@ -20,14 +20,18 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using System.Dynamic;
+using System.Security.Cryptography;
+using System.Diagnostics;
+using System.Web.Http.Results;
 
 namespace backend.Service
 {
     public class CarServer : ICarServer
     {
+
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
         string connstr = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
-
+        CommonLogic commonLogic = new CommonLogic();
         public IEnumerable<car_view> GetAllTableCar()
         {
             var car_view = db.car
@@ -113,11 +117,12 @@ namespace backend.Service
                 default:
                     break;
             }
-            return cars;
+            List<car_view> car_Views = commonLogic.convertAllCar(cars);
+            return car_Views;
         }
 
         
-        public IEnumerable<car_view> GetFavoriteCar(int? customer_id)
+        public IEnumerable<car_view> GetFavoriteCar(int customer_id)
         {
             var result = from fc in db.favorite_car
                          join c in db.car on fc.car_id equals c.car_id
@@ -140,16 +145,13 @@ namespace backend.Service
                              image = c.image,
                              favorite_car_id = fc.favorite_car_id
                          };
-            return result;
+            List<car_view> car_Views = commonLogic.convertCar(result);
+            return car_Views;
         }
 
 
         public IEnumerable<car_view> GetAllMyCar(int? customer_id)
         {
-           /* var cw = GetFavoriteCar(customer_id);
-            // Lấy danh sách car_id
-            List<int> carIds = cw.Select(car => car.car_id).ToList();*/
-
             var car_view = db.car
                 .GroupJoin(
                     db.model,
@@ -207,21 +209,20 @@ namespace backend.Service
                     image = res.c.image,
                     complete_flg = res.book.complete_flg,
                     description = res.c.image != null ? "f" : "f"
-                })
-                .ToList();
+                });
 
 
             var cars = car_view
                 .Where(item => item.customer_id == customer_id)
                 .ToList();
             cars = cars.OrderBy(c => c.car_id).ToList();
+            cars = commonLogic.convertMyCar(cars);
             return cars;
         }
 
-
+       
         public IEnumerable<car_view> Getcar(int id, int? customer_id)
         {
-            /* int count = db.feeback.Count(f => f.car_id == 4);*/
             var feedbackStatistics = db.feeback
                 .Where(f => f.car_id == id)
                 .GroupBy(f => 1)
@@ -243,6 +244,8 @@ namespace backend.Service
                          join m in db.model on c.model_id equals m.model_id
                          join b in db.brand on c.brand_id equals b.brand_id
                          join ct in db.car_type on c.car_type_id equals ct.car_type_id
+                         join vr in db.vehicle_registration on c.vehicle_registration_id equals vr.vehicle_registration_id into vrGroup
+                         from vr in vrGroup.DefaultIfEmpty()
                          join fc in db.favorite_car.Where(fc => fc.customer_id == customer_id) on c.car_id equals fc.car_id into fcGroup
                          from fc in fcGroup.DefaultIfEmpty()
                          select new car_view()
@@ -252,19 +255,22 @@ namespace backend.Service
                              model_name = m.model_name,
                              brand_id = c.brand_id,
                              brand_name = b.brand_name,
+                             car_type_id = c.car_type_id,
+                             car_type_name = ct.car_type_name,
                              price = c.price,
                              count_journeys = c.count_journeys,
                              address = c.address,
                              customer_id = c.customer_id,
                              image = c.image,
                              description = c.description,
-                             rate = 5,
                              number_plate = c.number_plate,
                              year_manufacture = c.year_manufacture,
                              number_seats = ct.number_seats,
                              favorite_car_id = fc.favorite_car_id,
                              count_comment = count,
-                             rate_avg = avgRate
+                             rate_avg = avgRate,
+                             vehicle_registration_image = vr.vehicle_registration_image,
+                             vehicle_inspection_image = vr.vehicle_inspection_image
                          };
             var cars = result
                .Where(item => item.car_id == id).ToList();
@@ -445,6 +451,23 @@ namespace backend.Service
             }
         }
 
+        public void ChangeCarJourneys(int? car_id)
+        {
+            try
+            {
+                if( car_id == null )
+                {
+                    throw new NotImplementedException();
+                }
+                var carFind = db.car.Find(car_id);
+                carFind.count_journeys = carFind.count_journeys + 1;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw new NotImplementedException();
+            }
 
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace backend.Controllers
     {
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
         string connstr = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
-
+        CommonLogic commonLogic = new CommonLogic();
         // GET: api/customers
         public IQueryable<customer> Getcustomer()
         {

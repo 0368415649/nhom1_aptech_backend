@@ -52,7 +52,7 @@ namespace backend.Controllers
 
         [HttpGet]
         [Route("api/get_favorite_car")]
-        public IEnumerable<car_view> GetFavoriteCar(int? customer_id)
+        public IEnumerable<car_view> GetFavoriteCar(int customer_id)
         {
             return _iCarServer.GetFavoriteCar(customer_id);
         }
