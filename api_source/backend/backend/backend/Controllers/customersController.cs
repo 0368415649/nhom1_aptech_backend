@@ -36,13 +36,28 @@ namespace backend.Controllers
         }
 
         [ResponseType(typeof(customer))]
+        [Route("api/get_customer_verify")]
+        public IHttpActionResult GetCustomerVeryfi()
+        {
+
+            var customer = db.customer.Where(item => item.verify_flg == 1);
+            if (customer == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(customer);
+        }
+
+
+        [ResponseType(typeof(customer))]
         [Route("api/get_customer")]
         public IHttpActionResult Getcustomer(int id)
         {
             var countCar = db.car
                 .Where(c => c.customer_id == id)
-                .Select(c => (int?)c.count_journeys) // Chuyển đổi sang kiểu int? để xử lý trường hợp có giá trị null
-                .DefaultIfEmpty(0) // Đặt giá trị mặc định là 0 nếu không có giá trị
+                .Select(c => (int?)c.count_journeys) 
+                .DefaultIfEmpty(0) 
                 .Sum();
             customer customer = db.customer.Find(id);
             if (customer == null)

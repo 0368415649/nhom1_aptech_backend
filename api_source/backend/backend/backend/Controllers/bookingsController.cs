@@ -19,10 +19,40 @@ namespace backend.Controllers
         private ADDDA_APPEntities db = new ADDDA_APPEntities();
         CarServer carServer = new CarServer();
 
-        // GET: api/bookings
-        public IQueryable<booking> Getbooking()
+        [HttpGet]
+        [Route("api/get_booking_verify")]
+        [ResponseType(typeof(booking))]
+
+        public IHttpActionResult Getbooking()
         {
-            return db.booking;
+            var result = from bk in db.booking
+                         join c in db.car on bk.car_id equals c.car_id
+                         join b in db.brand on c.brand_id equals b.brand_id
+                         join m in db.model on c.model_id equals m.model_id
+                         join cs in db.customer on bk.create_by equals cs.customer_id
+                         where bk.boocking_status_id == 1
+                         select new booking_view()
+                         {
+                             booking_id = bk.booking_id,
+                             boocking_status_id = bk.boocking_status_id,
+                             total = bk.total,
+                             start_date = bk.start_date,
+                             start_time = bk.start_time,
+                             end_date = bk.end_date,
+                             end_time = bk.end_time,
+                             car_id = c.car_id,
+                             model_id = c.model_id,
+                             model_name = m != null ? m.model_name : null,
+                             brand_id = c.brand_id,
+                             brand_name = b != null ? b.brand_name : null,
+                             address = c.address,
+                             image = c.image,
+                             create_by = cs.customer_id,
+                             phone = cs.phone,
+                             name = cs.name_display
+                             
+                         };
+            return Ok(result);
         }
 
         // GET: api/bookings/5
@@ -38,15 +68,18 @@ namespace backend.Controllers
             return Ok(booking);
         }
 
+
         [HttpGet]
         [Route("api/get_booking_user")]
+        [ResponseType(typeof(booking))]
+
         public IEnumerable<booking_view> GetBookingUser(int? customer_id, int? boocking_status_id)
-        {
-            var check = false;
-            if (boocking_status_id == 4)
             {
-                check = true;
-            }
+                var check = false;
+                if (boocking_status_id == 4)
+                {
+                    check = true;
+                }
             var booking_view = db.booking
                 .GroupJoin(
                     db.customer,
@@ -168,7 +201,7 @@ namespace backend.Controllers
         // PUT: api/bookings/5
         [ResponseType(typeof(void))]
         [HttpPut]
-        [Route("api/    ")]
+        [Route("api/change_status_booking")]
         public IHttpActionResult CancelBooking(booking booking)
         {
             try
