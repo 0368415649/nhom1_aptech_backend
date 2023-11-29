@@ -37,7 +37,7 @@ namespace backend.Models
         public Nullable<int> favorite_car_id { get; set; }
         public Nullable<int> count_comment { get; set; }
         public Nullable<double> rate_avg { get; set; }
-
+        public string phone { get; set; }
 
     }
 }

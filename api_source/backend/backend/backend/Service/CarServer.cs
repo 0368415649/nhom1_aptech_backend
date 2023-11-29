@@ -149,6 +149,35 @@ namespace backend.Service
             return car_Views;
         }
 
+        public IEnumerable<car_view> GetAllCarVerify()
+        {
+            var result = from c in db.car
+                         join b in db.brand on c.brand_id equals b.brand_id
+                         join m in db.model on c.model_id equals m.model_id
+                         join css in db.customer on c.customer_id equals css.customer_id
+                         where c.car_status_id == 1
+                         select new car_view()
+                         {
+                             car_id = c.car_id,
+                             model_id = c.model_id,
+                             car_type_id = c.car_type_id,
+                             model_name = m != null ? m.model_name : null,
+                             brand_id = c.brand_id,
+                             brand_name = b != null ? b.brand_name : null,
+                             price = c.price,
+                             count_journeys = c.count_journeys,
+                             address = c.address,
+                             customer_id = c.customer_id,
+                             car_status_id = c.car_status_id,
+                             image = c.image,
+                             number_plate = c.number_plate,
+                             year_manufacture = c.year_manufacture,
+                             name_display = css.name_display,
+                             phone = css.phone
+                         };
+            List<car_view> car_Views = commonLogic.convertCar(result);
+            return car_Views;
+        }
 
         public IEnumerable<car_view> GetAllMyCar(int? customer_id)
         {
@@ -461,6 +490,25 @@ namespace backend.Service
                 }
                 var carFind = db.car.Find(car_id);
                 carFind.count_journeys = carFind.count_journeys + 1;
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                throw new NotImplementedException();
+            }
+
+        }
+
+        public void ChangeProcessingCar(int? car_id, int status)
+        {
+            try
+            {
+                if (car_id == null)
+                {
+                    throw new NotImplementedException();
+                }
+                var carFind = db.car.Find(car_id);
+                carFind.car_status_id = status;
                 db.SaveChanges();
             }
             catch (Exception)

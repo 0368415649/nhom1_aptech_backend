@@ -61,7 +61,7 @@ namespace backend.Service
             {
                 StringBuilder sql = new StringBuilder();
                 sql.Append(" UPDATE [customer] SET ");
-                sql.Append(" verify_flg = " + 2);
+                sql.Append(" verify_flg = " + 3);
                 sql.Append(" WHERE  customer_id  =  " + customer.customer_id);
                 if (cnn.State == ConnectionState.Closed)
                 {
@@ -93,7 +93,8 @@ namespace backend.Service
             {
                 StringBuilder sql = new StringBuilder();
                 sql.Append(" UPDATE [customer] SET ");
-                sql.Append(" verify_flg = " + 3);
+                sql.Append(" verify_flg = " + 2);
+                sql.Append(", role_id = " + 2);
                 sql.Append(" WHERE  customer_id  =  " + customer.customer_id);
                 if (cnn.State == ConnectionState.Closed)
                 {

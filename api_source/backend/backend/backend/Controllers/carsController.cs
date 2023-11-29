@@ -33,7 +33,15 @@ namespace backend.Controllers
         {
             _iCarServer = new CarServer();
         }
-        
+
+        [ResponseType(typeof(car))]
+        [HttpGet]
+        [Route("api/get_verify_car")]
+        public IEnumerable<car_view> GetListCarVerify()
+        {
+            return _iCarServer.GetAllCarVerify();
+        }
+
         [ResponseType(typeof(car))]
         [HttpGet]
         [Route("api/get_details_car")]

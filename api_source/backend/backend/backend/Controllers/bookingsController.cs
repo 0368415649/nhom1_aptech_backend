@@ -45,7 +45,7 @@ namespace backend.Controllers
                              model_name = m != null ? m.model_name : null,
                              brand_id = c.brand_id,
                              brand_name = b != null ? b.brand_name : null,
-                             address = c.address,
+                             address = bk.address,
                              image = c.image,
                              create_by = cs.customer_id,
                              phone = cs.phone,
@@ -218,11 +218,17 @@ namespace backend.Controllers
                     case 2:
                     case 3:
                         bookingFind.complete_flg = 0;
+                        if (booking.boocking_status_id == 3)
+                        {
+                            int? car_id = bookingFind.car_id;
+                            carServer.ChangeProcessingCar(car_id, 4);
+                        }
                         break;
                     default:
                         if(booking.boocking_status_id == 4)
                         {
                              int? car_id = bookingFind.car_id;
+                            carServer.ChangeProcessingCar(car_id, 3);
                             carServer.ChangeCarJourneys(car_id);
                         }
                         bookingFind.complete_flg = 1;

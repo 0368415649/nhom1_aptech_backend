@@ -14,6 +14,7 @@ namespace backend.Service.SeviceInterface
     public interface ICarServer
     {
         IEnumerable<car_view> GetAllTableCar();
+        IEnumerable<car_view> GetAllCarVerify();
         IEnumerable<car_view> GetAllCar(int? typeCar, int? brand, string order_by_price, string name);
         IEnumerable<car_view> GetFavoriteCar(int customer_id);
         IEnumerable<car_view> GetAllMyCar(int? customer_id);
